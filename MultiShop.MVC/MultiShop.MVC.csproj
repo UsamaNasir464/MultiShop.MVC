@@ -4,4 +4,9 @@
     <TargetFramework>net5.0</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\MultiShop.Mvc.DataAccess\MultiShop.Mvc.DataAccess.csproj" />
+    <ProjectReference Include="..\MultiShop.Mvc.Models\MultiShop.Mvc.Models.csproj" />
+  </ItemGroup>
+
 </Project>

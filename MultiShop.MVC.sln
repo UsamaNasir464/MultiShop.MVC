@@ -5,7 +5,9 @@ VisualStudioVersion = 16.0.32602.291
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MultiShop.MVC", "MultiShop.MVC\MultiShop.MVC.csproj", "{CA1F5F32-7526-4971-8128-9951D3D4C12D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MultiShop.Mvc.DataAccess", "MultiShop.Mvc.DataAccess\MultiShop.Mvc.DataAccess.csproj", "{34A3C81F-3BDC-4E37-8B61-B2E5C681B217}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MultiShop.Mvc.DataAccess", "MultiShop.Mvc.DataAccess\MultiShop.Mvc.DataAccess.csproj", "{34A3C81F-3BDC-4E37-8B61-B2E5C681B217}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MultiShop.Mvc.Models", "MultiShop.Mvc.Models\MultiShop.Mvc.Models.csproj", "{0D39FDE1-179B-433E-BE7C-002C08C004BC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{34A3C81F-3BDC-4E37-8B61-B2E5C681B217}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{34A3C81F-3BDC-4E37-8B61-B2E5C681B217}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{34A3C81F-3BDC-4E37-8B61-B2E5C681B217}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0D39FDE1-179B-433E-BE7C-002C08C004BC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0D39FDE1-179B-433E-BE7C-002C08C004BC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0D39FDE1-179B-433E-BE7C-002C08C004BC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0D39FDE1-179B-433E-BE7C-002C08C004BC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

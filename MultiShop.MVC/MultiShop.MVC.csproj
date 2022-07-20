@@ -13,4 +13,9 @@
     <ProjectReference Include="..\MultiShop.Mvc.Models\MultiShop.Mvc.Models.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Controllers\" />
+    <Folder Include="Models\" />
+  </ItemGroup>
+
 </Project>

@@ -10,6 +10,9 @@ namespace MultiShop.Mvc.DataAccess.Infrastructure.IRepository
     public interface ICategoryConsumeApi
     {
         Task<List<Category>> GetAllCategory();
-    
+        Task<Category> GetCategoryById(int id);
+        Task<Category> CreateCategory(Category category);
+
+
     }
 }

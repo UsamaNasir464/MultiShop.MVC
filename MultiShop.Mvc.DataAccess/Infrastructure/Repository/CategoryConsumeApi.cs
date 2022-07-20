@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Net.Http.Json;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -53,5 +54,21 @@ namespace MultiShop.Mvc.DataAccess.Infrastructure.Repository
             return category;
         
         }
+
+        public async Task<Category> CreateCategory(Category category) 
+        {
+            Category newCategory=null;
+            _httpClient.BaseAddress = new Uri("https://localhost:44398/");
+            var response =  await _httpClient.PostAsJsonAsync<Category>("CategoryApi", category);
+            if(response.IsSuccessStatusCode)
+            {
+                var result= response.Content.ReadAsStringAsync().Result;
+                newCategory = JsonConvert.DeserializeObject<Category>(result);
+            
+            }
+            return newCategory;
+
+        }
+
     }
 }

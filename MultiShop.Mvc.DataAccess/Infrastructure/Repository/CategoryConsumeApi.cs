@@ -70,5 +70,24 @@ namespace MultiShop.Mvc.DataAccess.Infrastructure.Repository
 
         }
 
+
+        public async Task<Category> EditCategory(int id)
+        {
+            Category category = null;
+            _httpClient.BaseAddress = new Uri("https://localhost:44398/");
+            var response = await _httpClient.GetAsync("CategoryApi?id" + id);
+            if (response.IsSuccessStatusCode)
+            {
+                var result = response.Content.ReadAsStringAsync().Result;
+                category = JsonConvert.DeserializeObject<Category>(result);
+                
+            }
+            return category;
+
+        }
+
+
+
+
     }
 }

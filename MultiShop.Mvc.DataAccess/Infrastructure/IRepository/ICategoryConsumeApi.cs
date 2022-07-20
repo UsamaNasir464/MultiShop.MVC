@@ -13,6 +13,8 @@ namespace MultiShop.Mvc.DataAccess.Infrastructure.IRepository
         Task<Category> GetCategoryById(int id);
         Task<Category> CreateCategory(Category category);
 
+        Task<Category> EditCategory(int id);
+
 
     }
 }

@@ -30,9 +30,9 @@ namespace MultiShop.Mvc.DataAccess.Infrastructure.Repository
            
             if (response.IsSuccessStatusCode)
             {
-                var display = response.Content.ReadAsStringAsync().Result;
+                var result = response.Content.ReadAsStringAsync().Result;
 
-                categoryList = JsonConvert.DeserializeObject<List<Category>>(display);
+                categoryList = JsonConvert.DeserializeObject<List<Category>>(result);
 
             }
             return categoryList;
@@ -43,17 +43,15 @@ namespace MultiShop.Mvc.DataAccess.Infrastructure.Repository
             Category category = null;
             _httpClient.BaseAddress = new Uri("https://localhost:44398/");
             var response = await _httpClient.GetAsync("CategoryApi?id" + id.ToString());
+
             if (response.IsSuccessStatusCode)
             {
                 var result = response.Content.ReadAsStringAsync().Result;
-                
+                category = JsonConvert.DeserializeObject<Category>(result);
             }
-            //For Solve this error for now
-            return null;
-           
-
-
-
+            
+            return category;
+        
         }
     }
 }

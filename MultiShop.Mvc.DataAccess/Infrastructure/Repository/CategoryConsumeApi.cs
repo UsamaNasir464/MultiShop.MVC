@@ -48,7 +48,8 @@ namespace MultiShop.Mvc.DataAccess.Infrastructure.Repository
                 var result = response.Content.ReadAsStringAsync().Result;
                 
             }
-
+            //For Solve this error for now
+            return null;
            
 
 

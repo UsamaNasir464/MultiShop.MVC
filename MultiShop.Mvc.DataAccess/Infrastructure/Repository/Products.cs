@@ -1,5 +1,6 @@
 ﻿using MultiShop.Mvc.DataAccess.Infrastructure.IRepository;
 using MultiShop.Mvc.Models.ViewModels;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -30,6 +31,7 @@ namespace MultiShop.Mvc.DataAccess.Infrastructure.Repository
                 products = JsonConvert.DeserializeObject<List<Product>>(display);
 
             }
+            return products;
         }
     }
 }

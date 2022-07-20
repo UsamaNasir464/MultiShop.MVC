@@ -86,6 +86,18 @@ namespace MultiShop.Mvc.DataAccess.Infrastructure.Repository
 
         }
 
+        public bool DeleteCategory(int id)
+        {
+            _httpClient.BaseAddress = new Uri("https://localhost:44398/");
+            var response = _httpClient.GetAsync("CategoryApi?id" + id);
+            response.Wait();
+            var test = response.Result;
+            if (test.IsSuccessStatusCode)
+            {
+                return true;
+            }
+            return false;
+        }
 
 
 

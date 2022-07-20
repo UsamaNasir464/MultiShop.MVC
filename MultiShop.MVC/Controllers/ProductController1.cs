@@ -58,6 +58,11 @@ namespace MultiShop.MVC.Controllers
             _products.DeleteProduct(id);
             return RedirectToAction("Index");
         }
+        public IActionResult Details(int id)
+        {
+            _products.GetProductsByID(id);
+            return View();
+        }
     }
 
 }

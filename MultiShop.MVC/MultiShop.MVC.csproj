@@ -5,6 +5,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\MultiShop.Mvc.DataAccess\MultiShop.Mvc.DataAccess.csproj" />
     <ProjectReference Include="..\MultiShop.Mvc.Models\MultiShop.Mvc.Models.csproj" />
   </ItemGroup>

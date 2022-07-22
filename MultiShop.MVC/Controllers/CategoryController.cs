@@ -25,9 +25,61 @@ namespace MultiShop.MVC.Controllers
             return View(allCategories);
         }
 
-        public  IActionResult Create()
-        { 
+        public async Task<ActionResult> Create()
+        {
             return View();
         }
+        [HttpPost]
+        public async Task<ActionResult> Create(Category category)
+        {
+            if (ModelState.IsValid)
+            {
+                await _consumeCategory.CreateCategory(category);
+                return RedirectToAction("Index");
+            }
+            return View();
+        }
+
+        public async Task<ActionResult> Details(int id)
+        {
+            var result = await _consumeCategory.GetCategoryById(id);
+            return View(result);
+        }
+
+        public async Task<ActionResult> Edit(int id)
+        {
+            var result = await _consumeCategory.GetCategoryById(id);
+            return View(result);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> Edit(Category category)
+        {
+            if (ModelState.IsValid)
+            {
+                await _consumeCategory.EditCategory(category);
+                return RedirectToAction("index");
+            }
+           
+            return View();
+        }
+
+        public async Task<ActionResult> Delete(int id)
+        {
+            var result = await _consumeCategory.GetCategoryById(id);
+            return View(result);
+        }
+
+        [HttpPost, ActionName("Delete")]
+
+        public async Task<ActionResult> DeleteConfirm(int id)
+        {
+            _consumeCategory.DeleteCategory(id);
+            return RedirectToAction("index");
+        }
+
+
+
+
     }
 }

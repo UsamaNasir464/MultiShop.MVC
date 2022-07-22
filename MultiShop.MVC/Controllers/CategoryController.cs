@@ -25,7 +25,7 @@ namespace MultiShop.MVC.Controllers
             return View(allCategories);
         }
 
-        public async Task<ActionResult> Create()
+        public IActionResult Create()
         {
             return View();
         }
@@ -72,7 +72,7 @@ namespace MultiShop.MVC.Controllers
 
         [HttpPost, ActionName("Delete")]
 
-        public async Task<ActionResult> DeleteConfirm(int id)
+        public IActionResult DeleteConfirm(int id)
         {
             _consumeCategory.DeleteCategory(id);
             return RedirectToAction("index");

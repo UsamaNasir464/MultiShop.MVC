@@ -14,7 +14,7 @@ namespace MultiShop.Mvc.DataAccess.Infrastructure.IRepository
         Task<Category> CreateCategory(Category category);
         public bool DeleteCategory(int id);
 
-        Task<Category> EditCategory(int id);
+        Task<Category> EditCategory(Category category);
 
 
     }

@@ -1,4 +1,6 @@
-﻿@model MultiShop.Mvc.Models.ViewModels.Product
+﻿
+
+@model MultiShop.Mvc.Models.ViewModels.Product
 
 @{
     ViewData["Title"] = "Details";
@@ -43,6 +45,6 @@
     </dl>
 </div>
 <div>
-    @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
+    @Html.ActionLink("Edit", "Edit", new { }) |
     <a asp-action="Index">Back to List</a>
 </div>

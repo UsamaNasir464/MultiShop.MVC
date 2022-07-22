@@ -25,12 +25,8 @@ namespace MultiShop.MVC.Controllers
             return View(allCategories);
         }
 
-        public async Task<ActionResult> Create()
-        {
-
-            
-
-
+        public  IActionResult Create()
+        { 
             return View();
         }
     }

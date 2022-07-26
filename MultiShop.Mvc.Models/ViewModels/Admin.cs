@@ -13,8 +13,8 @@ namespace MultiShop.Mvc.Models.ViewModels
         public int Id { get; set; }
 
         [Required(ErrorMessage = "Admin Name Is Required"), Display(Name = "Admin Name")]
-        
-        public string  Name { get; set; }
+
+        public string Name { get; set; }
 
 
         [Required(ErrorMessage = "Email Is Required"), Display(Name = "Email")]
@@ -35,8 +35,8 @@ namespace MultiShop.Mvc.Models.ViewModels
         [Compare("Password")]
         public string ConfirmPasswrd { get; set; }
 
-        [Display(Name ="Address")]
-        public string? Address { get; set; }
+        [Display(Name = "Address")]
+        public string Address { get; set; }
 
         [Required(ErrorMessage = "Phone Number Is Required"), Display(Name = "Phone Number")]
         public string PhoneNumber { get; set; }

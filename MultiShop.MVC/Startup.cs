@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using MultiShop.Mvc.DataAccess.Infrastructure.IRepository;
 using MultiShop.Mvc.DataAccess.Infrastructure.Repository;
+using MultiShop.Mvc.DataAccess.ServiceBus.EmailService;
 
 namespace MultiShop.MVC
 {
@@ -27,6 +28,7 @@ namespace MultiShop.MVC
             services.AddScoped<ICategoryConsumeApi, CategoryConsumeApi>();
             services.AddScoped<IProducts, Products>();
             services.AddScoped<IOrderConsumeApi, OrderConsumeApi>();
+            services.AddScoped<IEmailSending, EmailSending>();
 
         }
 

@@ -1,10 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MultiShop.Mvc.DataAccess.Infrastructure.IRepository;
+using MultiShop.Mvc.DataAccess.ServiceBus.EmailService;
 using MultiShop.Mvc.Models.Request;
 using MultiShop.Mvc.Models.ViewModels;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace MultiShop.MVC.Controllers
@@ -12,9 +11,11 @@ namespace MultiShop.MVC.Controllers
     public class OrderController : Controller
     {
         private readonly IOrderConsumeApi _order;
-        public OrderController(IOrderConsumeApi order)
+        private readonly IEmailSending _emailSending;
+        public OrderController(IOrderConsumeApi order, IEmailSending emailSending)
         {
             _order = order;
+            _emailSending = emailSending;
         }
         public async Task<ActionResult> Index()
         {
@@ -32,6 +33,7 @@ namespace MultiShop.MVC.Controllers
             if (ModelState.IsValid)
             {
                 await _order.CreateOrder(order);
+                await _emailSending.SendMessageAsync(order, "auxiliumnayatel");
                 return RedirectToAction("Index");
             }
             return View();

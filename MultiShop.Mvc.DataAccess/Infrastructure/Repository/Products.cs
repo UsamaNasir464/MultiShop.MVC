@@ -1,4 +1,5 @@
 ﻿using MultiShop.Mvc.DataAccess.Infrastructure.IRepository;
+using MultiShop.Mvc.Models.Request;
 using MultiShop.Mvc.Models.ViewModels;
 using Newtonsoft.Json;
 using System;
@@ -20,16 +21,16 @@ namespace MultiShop.Mvc.DataAccess.Infrastructure.Repository
             _httpClient = httpClient;
         }
 
-        public async Task<Product> CreateProduct(Product product)
+        public async Task<ProductCreateRequest> CreateProduct(ProductCreateRequest product)
         {
-                Product productsCreate = null;
+            ProductCreateRequest productsCreate = null;
                 _httpClient.BaseAddress = new Uri("https://localhost:44398/");
-                var response = await _httpClient.PostAsJsonAsync<Product>("api/ProductApi/CreateProducts", product);
+                var response = await _httpClient.PostAsJsonAsync<ProductCreateRequest>("api/ProductApi/CreateProducts", product);
                 
                 if (response.IsSuccessStatusCode)
                 {
                     var display = response.Content.ReadAsStringAsync().Result;
-                    productsCreate = JsonConvert.DeserializeObject<Product>(display);
+                    productsCreate = JsonConvert.DeserializeObject<ProductCreateRequest>(display);
 
                 }
             return productsCreate;
@@ -51,15 +52,15 @@ namespace MultiShop.Mvc.DataAccess.Infrastructure.Repository
             return false;
         }
 
-        public async Task<Product> EditProduct(Product product)
+        public async Task<ProductEditRequest> EditProduct(ProductEditRequest product)
         {
-            Product productsEdit = null;
+            ProductEditRequest productsEdit = null;
             _httpClient.BaseAddress = new Uri("https://localhost:44398/");
-            var response = await _httpClient.PutAsJsonAsync<Product>("api/ProductApi/EditProducts", product);
+            var response = await _httpClient.PutAsJsonAsync<ProductEditRequest>("api/ProductApi/EditProducts", product);
             if (response.IsSuccessStatusCode)
             {
                 var display = response.Content.ReadAsStringAsync().Result;
-                productsEdit = JsonConvert.DeserializeObject<Product>(display);
+                productsEdit = JsonConvert.DeserializeObject<ProductEditRequest>(display);
 
             }
             return productsEdit;

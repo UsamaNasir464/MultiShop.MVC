@@ -24,7 +24,7 @@ namespace MultiShop.MVC
         public void ConfigureServices(IServiceCollection services)
 
         {
-            services.AddIdentity<RegisterNewUser, IdentityRole>();
+            //services.AddIdentity<RegisterNewUser, IdentityRole>();
 
             services.AddHttpClient<ICategoryConsumeApi, CategoryConsumeApi>();
             services.AddHttpClient<IProducts, Products>();

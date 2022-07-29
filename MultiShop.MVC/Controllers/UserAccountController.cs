@@ -1,15 +1,11 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using MultiShop.Mvc.DataAccess.Infrastructure.IRepository;
 using MultiShop.Mvc.Models.ViewModels;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace MultiShop.MVC.Controllers
 {
-    
+
     public class UserAccountController : Controller
     {
         private readonly IUserAccount _userAccount;
@@ -20,14 +16,12 @@ namespace MultiShop.MVC.Controllers
         }
         public ActionResult Register()
         {
-
             return View();
-
         }
         [HttpPost]
         public async Task<IActionResult> Register(User user)
         {
-             await _userAccount.CreateUserAsync(user);
+            await _userAccount.CreateUserAsync(user);
             return RedirectToAction("Index", "Product");
         }
         public ActionResult Login()
@@ -37,7 +31,7 @@ namespace MultiShop.MVC.Controllers
         [HttpPost]
         public async Task<IActionResult> Login(Login login)
         {
-             await _userAccount.Login(login);
+            await _userAccount.Login(login);
             return RedirectToAction("Index", "Product");
         }
         public IActionResult LogOut()

@@ -24,5 +24,5 @@ namespace MultiShop.Mvc.Models.Request
         public string ProductImage { get; set; }
 
         public int CatFId { get; set; }
-    } 
+    }
 }

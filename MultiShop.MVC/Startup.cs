@@ -1,11 +1,13 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using MultiShop.Mvc.DataAccess.Infrastructure.IRepository;
 using MultiShop.Mvc.DataAccess.Infrastructure.Repository;
 using MultiShop.Mvc.DataAccess.ServiceBus.EmailService;
+using MultiShop.Mvc.Models.ViewModels;
 
 namespace MultiShop.MVC
 {
@@ -20,7 +22,10 @@ namespace MultiShop.MVC
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
+
         {
+            services.AddIdentity<RegisterNewUser, IdentityRole>();
+
             services.AddHttpClient<ICategoryConsumeApi, CategoryConsumeApi>();
             services.AddHttpClient<IProducts, Products>();
             services.AddControllersWithViews();
@@ -29,6 +34,8 @@ namespace MultiShop.MVC
             services.AddScoped<IProducts, Products>();
             services.AddScoped<IOrderConsumeApi, OrderConsumeApi>();
             services.AddScoped<IEmailSending, EmailSending>();
+            services.AddScoped<IUserAccount, UserAccount>();
+           
 
         }
 

@@ -1,25 +1,37 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using MultiShop.Mvc.DataAccess.Infrastructure.IRepository;
 using MultiShop.MVC.Models;
 using System.Diagnostics;
+using System.Threading.Tasks;
 
 namespace MultiShop.MVC.Controllers
 {
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly IProducts _products;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(IProducts products, ILogger<HomeController> logger)
         {
+            _products = products;
             _logger = logger;
         }
-
-        public IActionResult Index()
+        
+      
+        public async Task<IActionResult> Index()
+        {
+            return View(await _products.GetAllProducts());
+        }
+        public IActionResult Cart()
         {
             return View();
         }
-
-        public IActionResult Privacy()
+        public IActionResult Shop()
+        {
+            return View();
+        }
+        public IActionResult Checkout()
         {
             return View();
         }

@@ -22,7 +22,7 @@ namespace MultiShop.MVC.IOC
             builder.RegisterType<Products>().As<IProducts>().InstancePerLifetimeScope();
             builder.RegisterType<HttpClient>().As<HttpClient>().InstancePerLifetimeScope();
             builder.RegisterType<CartDetailsConsumeApi>().As<ICartDetailsConsumeApi>().InstancePerLifetimeScope();
-            builder.RegisterType<CartHeaderConsumeApi>().As<ICartDetailsConsumeApi>().InstancePerLifetimeScope();
+            builder.RegisterType<CartHeaderConsumeApi>().As<ICartHeaderConsumeApi>().InstancePerLifetimeScope();
            
 
             

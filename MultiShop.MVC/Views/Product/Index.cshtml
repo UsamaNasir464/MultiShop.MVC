@@ -55,7 +55,7 @@
                 @Html.DisplayFor(modelItem => item.DiscountPrice)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.ProductImagePath)
+                <img src="@Url.Content(item.ProductImagePath)" />
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.CatFId)

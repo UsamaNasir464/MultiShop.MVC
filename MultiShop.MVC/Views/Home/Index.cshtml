@@ -12,7 +12,7 @@
             <div class="col-lg-3 col-md-4 col-sm-6 pb-1">
                 <div class="product-item bg-light mb-4">
                     <div class="product-img position-relative overflow-hidden">
-                        <img class="img-fluid w-100" src="@Url.Content(item.ProductImage)" alt="">
+                        <img class="img-fluid w-100" src="@item.ProductImagePath" height="100" width="300" alt="">
                         <div class="product-action">
                             <a class="btn btn-outline-dark btn-square" href="@Url.Action("Cart" , "Home" ,new { id = item.Id})"><i class="fa fa-shopping-cart"></i></a>
 

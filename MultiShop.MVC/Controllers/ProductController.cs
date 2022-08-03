@@ -26,7 +26,7 @@ namespace MultiShop.MVC.Controllers
         {
             return View();
         }
-        [HttpPost]
+        //[HttpPost]
         //public async Task<IActionResult> Create(ProductCreateRequest product)
         //{
         //    await _products.CreateProduct(product);

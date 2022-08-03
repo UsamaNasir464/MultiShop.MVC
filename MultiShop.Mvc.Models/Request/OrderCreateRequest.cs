@@ -21,14 +21,19 @@ namespace MultiShop.Mvc.Models.Request
         public string Address { get; set; }
 
         public string PaymentMethod { get; set; }
-
         public double GrandTotal { get; set; }
 
         public DateTime OrderDate { get; set; }
-        
+
+        //public int ProductQuantity { get; set; }
+
+        //public decimal ProductPrice { get; set; }
+
         public string OrderType { get; set; }
 
-        public Guid UserFid { get; set; }
-    
+        //public Guid UserFid { get; set; }
+
+        //public int ProductFId { get; set; }
+
     }
 }

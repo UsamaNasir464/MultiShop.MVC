@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
 using MultiShop.Mvc.DataAccess.Infrastructure.IRepository;
 using MultiShop.Mvc.Models.Request;
 using System.Threading.Tasks;
@@ -8,10 +9,11 @@ namespace MultiShop.MVC.Controllers
     public class ProductController : Controller
     {
         private readonly IProducts _products;
-
-        public ProductController(IProducts products)
+        private readonly IWebHostEnvironment _hostEnvironment;
+        public ProductController(IProducts products, IWebHostEnvironment hostEnvironment)
         {
             _products = products;
+            _hostEnvironment = hostEnvironment;
         }
         [HttpGet]
         public async Task<IActionResult> Index()
@@ -25,11 +27,11 @@ namespace MultiShop.MVC.Controllers
             return View();
         }
         [HttpPost]
-        public async Task<IActionResult> Create(ProductCreateRequest product)
-        {
-            await _products.CreateProduct(product);
-            return RedirectToAction("Index");
-        }
+        //public async Task<IActionResult> Create(ProductCreateRequest product)
+        //{
+        //    await _products.CreateProduct(product);
+        //    return RedirectToAction("Index");
+        //}
         [HttpGet]
         public async Task<IActionResult> Edit(int id)
         {

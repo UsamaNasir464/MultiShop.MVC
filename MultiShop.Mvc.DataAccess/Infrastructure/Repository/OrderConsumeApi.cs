@@ -69,7 +69,6 @@ namespace MultiShop.Mvc.DataAccess.Infrastructure.Repository
             {
                 var result = response.Content.ReadAsStringAsync().Result;
                 editOrder = JsonConvert.DeserializeObject<OrderEditRequest>(result);
-
             }
             return editOrder;
         }

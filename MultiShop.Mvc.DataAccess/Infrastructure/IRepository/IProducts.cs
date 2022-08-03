@@ -9,7 +9,7 @@ namespace MultiShop.Mvc.DataAccess.Infrastructure.IRepository
     {
         Task<List<Product>> GetAllProducts();
         Task<Product> GetProductsByID( int id );
-        Task<ProductCreateRequest> CreateProduct(ProductCreateRequest product);
+        //Task<Product> CreateProduct(ProductCreateRequest product);
         Task<ProductEditRequest> EditProduct(ProductEditRequest product);
         bool DeleteProduct(int id);
     }

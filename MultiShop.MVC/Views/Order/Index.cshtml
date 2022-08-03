@@ -34,19 +34,10 @@
                 @Html.DisplayNameFor(model => model.OrderDate)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.ProductQuantity)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ProductPrice)
-            </th>
-            <th>
                 @Html.DisplayNameFor(model => model.OrderType)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.UserFid)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ProductFId)
             </th>
             <th></th>
         </tr>
@@ -76,19 +67,10 @@
                 @Html.DisplayFor(modelItem => item.OrderDate)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.ProductQuantity)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ProductPrice)
-            </td>
-            <td>
                 @Html.DisplayFor(modelItem => item.OrderType)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.UserFid)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ProductFId)
             </td>
             <td>
                 @Html.ActionLink("Edit", "Edit", new {  id=item.Id  }) |

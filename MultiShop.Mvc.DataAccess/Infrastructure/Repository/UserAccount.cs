@@ -37,12 +37,13 @@ namespace MultiShop.Mvc.DataAccess.Infrastructure.Repository
             return loginUser;
         }
 
-        public Task LogOut()
+        public async Task LogOut()
         {
             _httpClient.BaseAddress = new Uri("https://localhost:44398/");
-            var response = _httpClient.GetAsync("api/UserAccountApi/LogOut");
-            return response;
+            var test = await _httpClient.GetAsync("api/UserAccountApi/LogOut");
         }
+
+        
     }
 }
 

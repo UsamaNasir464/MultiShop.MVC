@@ -38,6 +38,6 @@ namespace MultiShop.MVC.Controllers
         {
             _userAccount.LogOut();
             return RedirectToAction("Index", "Order");
-        }
+        }     
     }
 }

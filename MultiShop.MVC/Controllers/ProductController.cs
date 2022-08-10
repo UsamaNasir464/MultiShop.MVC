@@ -37,14 +37,21 @@ namespace MultiShop.MVC.Controllers
 
             var file = product.ProductImage;
             byte[] data;
-            string Name = product.Name;
-            string Description = product.Description;
+            string name = product.Name;
+            string description = product.Description;
+            string salePrice = product.SalePrice.ToString();
+            string discountPrice = product.DiscountPrice.ToString();
+            string catFId = product.CatFId.ToString();
+
+
 
 
             MultipartFormDataContent multiForm = new MultipartFormDataContent();
-            multiForm.Add(new StringContent(Name), "Name");
-            multiForm.Add(new StringContent(Description), "Description");
-            multiForm.Add(new StringContent("1"), "CatFId");
+            multiForm.Add(new StringContent(name), "Name");
+            multiForm.Add(new StringContent(description), "Description");
+            multiForm.Add(new StringContent(salePrice), "SalePrice");
+            multiForm.Add(new StringContent(discountPrice), "DiscountPrice");
+            multiForm.Add(new StringContent(catFId), "CatFId");
 
             //adding list of images in the MultipartFormDataContent with same key
 

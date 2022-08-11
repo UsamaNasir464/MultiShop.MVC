@@ -6,8 +6,6 @@ namespace MultiShop.Mvc.Models.ViewModels
     [Keyless]
     public class User
     {
-
-
         [Required(ErrorMessage = "Full Name Is Required"), Display(Name = "Full Name")]
 
         public string Name { get; set; }

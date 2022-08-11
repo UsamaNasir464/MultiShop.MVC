@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace MultiShop.Mvc.Models.Request
+﻿namespace MultiShop.Mvc.Models.Request
 {
     public class CartCreateRequest
     {

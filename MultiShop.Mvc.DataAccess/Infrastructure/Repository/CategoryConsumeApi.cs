@@ -12,7 +12,7 @@ namespace MultiShop.Mvc.DataAccess.Infrastructure.Repository
     public class CategoryConsumeApi : ICategoryConsumeApi
     {
         private readonly HttpClient _httpClient;
-        
+
         public CategoryConsumeApi(HttpClient httpClient)
         {
             _httpClient = httpClient;
@@ -22,14 +22,10 @@ namespace MultiShop.Mvc.DataAccess.Infrastructure.Repository
             List<Category> categoryList = new List<Category>();
             _httpClient.BaseAddress = new Uri("https://localhost:44398/");
             var response = await _httpClient.GetAsync("api/CategoryApi/Index");
-
-
             if (response.IsSuccessStatusCode)
             {
                 var result = response.Content.ReadAsStringAsync().Result;
-
                 categoryList = JsonConvert.DeserializeObject<List<Category>>(result);
-
             }
             return categoryList;
         }
@@ -39,7 +35,6 @@ namespace MultiShop.Mvc.DataAccess.Infrastructure.Repository
             Category category = null;
             _httpClient.BaseAddress = new Uri("https://localhost:44398/");
             var response = await _httpClient.GetAsync("api/CategoryApi/GetCategoryById/" + id.ToString());
-
             if (response.IsSuccessStatusCode)
             {
                 var result = response.Content.ReadAsStringAsync().Result;
@@ -87,6 +82,5 @@ namespace MultiShop.Mvc.DataAccess.Infrastructure.Repository
             }
             return false;
         }
-    
     }
 }

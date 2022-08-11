@@ -42,7 +42,7 @@ namespace MultiShop.MVC.Controllers
         }
         public async Task<IActionResult> GetUserId()
         {
-            var test = await _userAccount.GetUserId(GetEmail.Email);
+            var test = await _userAccount.GetUserId(GetEmailAndUserId.Email);
             return RedirectToAction("Index", "Order");
         }
     }

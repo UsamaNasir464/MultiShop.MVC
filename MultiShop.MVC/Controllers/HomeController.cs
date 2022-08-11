@@ -9,13 +9,13 @@ namespace MultiShop.MVC.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
         private readonly IProducts _products;
+        
 
-        public HomeController(IProducts products, ILogger<HomeController> logger)
+        public HomeController(IProducts products)
         {
             _products = products;
-            _logger = logger;
+            
         }
         
       
@@ -23,7 +23,7 @@ namespace MultiShop.MVC.Controllers
         {
             return View(await _products.GetAllProducts());
         }
-        public IActionResult Cart()
+        public IActionResult Cart(  )
         {
             return View();
         }

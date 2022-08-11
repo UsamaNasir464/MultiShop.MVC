@@ -24,11 +24,8 @@ namespace MultiShop.Mvc.DataAccess.ServiceBus.EmailService
             var msgBody = System.Text.Json.JsonSerializer.Serialize(orderDetails);
 
             var msg = new Message(Encoding.UTF8.GetBytes(msgBody));
-
-
+            
             await qClient.SendAsync(msg);
-
-
         }
     }
 }

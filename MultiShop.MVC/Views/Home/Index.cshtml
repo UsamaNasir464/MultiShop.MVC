@@ -14,15 +14,15 @@
                     <div class="product-img position-relative overflow-hidden">
                         <img class="img-fluid w-100" src="@item.ProductImagePath" height="100" width="300" alt="">
                         <div class="product-action">
-                            <a class="btn btn-outline-dark btn-square" href="@Url.Action("Cart" , "Home" ,new { id = item.Id})"><i class="fa fa-shopping-cart"></i></a>
+                            <a class="btn btn-outline-dark btn-square" href="@Url.Action("Cart" , "Home" ,new { id = item.Id })"><i class="fa fa-shopping-cart"></i></a>
 
                         </div>
                     </div>
                     <div class="text-center py-4">
-                        <a class="h6 text-decoration-none text-truncate" href="">@item.Name</a>
+                        <a class="h6 text-decoration-none text-truncate" href="@Url.Action("Details","Product" , new { id = item.Id })">@item.Name</a>
                         <div class="d-flex align-items-center justify-content-center mt-2">
                             <h5>@item.SalePrice</h5><h6 class="text-muted ml-2">
-                            @if(item.DiscountPrice!=null|| item.DiscountPrice <= 0) { 
+                            @if(item.DiscountPrice!=null || item.DiscountPrice < 0) { 
                             <del>@item.DiscountPrice</del>
                             }
                             </h6>

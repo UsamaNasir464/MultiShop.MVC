@@ -15,7 +15,7 @@ namespace MultiShop.Mvc.DataAccess.Infrastructure.Repository
     public class Products : IProducts
     {
         private readonly HttpClient _httpClient;
-        
+
         public Products(HttpClient httpClient)
         {
             _httpClient = httpClient;
@@ -29,14 +29,12 @@ namespace MultiShop.Mvc.DataAccess.Infrastructure.Repository
             string Name = product.Name;
             string Description = product.Description;
 
-
             MultipartFormDataContent multiForm = new MultipartFormDataContent();
             multiForm.Add(new StringContent(Name), "Name");
             multiForm.Add(new StringContent(Description), "Description");
             multiForm.Add(new StringContent("1"), "CatFId");
 
             //adding list of images in the MultipartFormDataContent with same key
-
             ByteArrayContent bytes;
             using (var br = new BinaryReader(file.OpenReadStream()))
             {
@@ -45,7 +43,6 @@ namespace MultiShop.Mvc.DataAccess.Infrastructure.Repository
             bytes = new ByteArrayContent(data);
             multiForm.Add(bytes, "ProductImage", product.ProductImage.FileName);
 
-            
             _httpClient.BaseAddress = new Uri("https://localhost:44398/");
             _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             HttpResponseMessage httpResponseMessage = _httpClient.PostAsync("api/ProductApi/CreateProducts", multiForm).Result;
@@ -55,37 +52,10 @@ namespace MultiShop.Mvc.DataAccess.Infrastructure.Repository
                 newProduct = JsonConvert.DeserializeObject<Product>(response);
             }
             return newProduct;
-
         }
-
-
-        
-
-            
-
-
-        
-
-
-        //public async Task<Product> CreateProduct(ProductCreateRequest product)
-        //{
-        //    Product productsCreate = null;
-        //    _httpClient.BaseAddress = new Uri("https://localhost:44398/");
-        //    var response = await _httpClient.PostAsJsonAsync<ProductCreateRequest>("api/ProductApi/CreateProducts", product);
-
-        //    if (response.IsSuccessStatusCode)
-        //    {
-        //        var display = response.Content.ReadAsStringAsync().Result;
-        //        productsCreate = JsonConvert.DeserializeObject<Product>(display);
-        //    }
-        //    return productsCreate;
-
-
-        //}
 
         public bool DeleteProduct(int id)
         {
-
             _httpClient.BaseAddress = new Uri("https://localhost:44398/");
             var response = _httpClient.DeleteAsync("api/ProductApi/DeleteProducts/" + id.ToString());
             response.Wait();
@@ -106,7 +76,6 @@ namespace MultiShop.Mvc.DataAccess.Infrastructure.Repository
             {
                 var display = response.Content.ReadAsStringAsync().Result;
                 productsEdit = JsonConvert.DeserializeObject<ProductEditRequest>(display);
-
             }
             return productsEdit;
         }
@@ -137,7 +106,5 @@ namespace MultiShop.Mvc.DataAccess.Infrastructure.Repository
             }
             return product;
         }
-
     }
-
 }

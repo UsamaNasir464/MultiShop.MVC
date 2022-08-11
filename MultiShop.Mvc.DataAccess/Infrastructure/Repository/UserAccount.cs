@@ -41,7 +41,7 @@ namespace MultiShop.Mvc.DataAccess.Infrastructure.Repository
                 loginResponse = JsonConvert.DeserializeObject<LoginResponse>(display);
                 if (loginResponse.Email != null)
                 {
-                    GetEmail.Email = loginResponse.Email;
+                    GetEmailAndUserId.Email = loginResponse.Email;
                 }
             }
             return loginResponse;
@@ -54,20 +54,16 @@ namespace MultiShop.Mvc.DataAccess.Infrastructure.Repository
         }
         public async Task<string> GetUserId(string email)
         {
-            _httpClient.BaseAddress= new Uri("https://localhost:44398/");
+            _httpClient.BaseAddress = new Uri("https://localhost:44398/");
             var test = await _httpClient.GetAsync("api/UserAccountApi/GetUserId?email=" + email);
             if (test.IsSuccessStatusCode)
             {
                 var display = test.Content.ReadAsStringAsync().Result;
+                GetEmailAndUserId.UserId = display;
                 return display;
-                
             }
             return "";
-
-
         }
-
-
     }
 }
 

@@ -43,9 +43,7 @@ namespace MultiShop.MVC.Controllers
             string discountPrice = product.DiscountPrice.ToString();
             string catFId = product.CatFId.ToString();
 
-
-
-
+            //MultiPart For Uploading Content/Image
             MultipartFormDataContent multiForm = new MultipartFormDataContent();
             multiForm.Add(new StringContent(name), "Name");
             multiForm.Add(new StringContent(description), "Description");
@@ -54,7 +52,6 @@ namespace MultiShop.MVC.Controllers
             multiForm.Add(new StringContent(catFId), "CatFId");
 
             //adding list of images in the MultipartFormDataContent with same key
-
             ByteArrayContent bytes;
             using (var br = new BinaryReader(file.OpenReadStream()))
             {
@@ -71,9 +68,9 @@ namespace MultiShop.MVC.Controllers
             {
                 var response = httpResponseMessage.Content.ReadAsStringAsync().Result;
             }
-            
             return RedirectToAction("Index");
         }
+        
         [HttpGet]
         public async Task<IActionResult> Edit(int id)
         {

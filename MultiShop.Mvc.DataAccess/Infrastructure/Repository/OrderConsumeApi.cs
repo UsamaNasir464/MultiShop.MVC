@@ -10,7 +10,6 @@ using System.Threading.Tasks;
 
 namespace MultiShop.Mvc.DataAccess.Infrastructure.Repository
 {
-
     public class OrderConsumeApi : IOrderConsumeApi
     {
         private readonly HttpClient _httpClient;
@@ -31,7 +30,6 @@ namespace MultiShop.Mvc.DataAccess.Infrastructure.Repository
             return allOrders;
         }
 
-
         public async Task<Order> GetOrderById(int id)
         {
             Order order = null;
@@ -44,7 +42,6 @@ namespace MultiShop.Mvc.DataAccess.Infrastructure.Repository
             }
             return order;
         }
-
 
         public async Task<OrderCreateRequest> CreateOrder(OrderCreateRequest order)
         {

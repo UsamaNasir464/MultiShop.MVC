@@ -43,8 +43,8 @@ namespace MultiShop.MVC.Controllers
             var result = await _order.GetOrderById(id);
             return View(result);
         }
-        [HttpPost]
 
+        [HttpPost]
         public async Task<ActionResult> Edit(OrderEditRequest order)
         {
             if (ModelState.IsValid)

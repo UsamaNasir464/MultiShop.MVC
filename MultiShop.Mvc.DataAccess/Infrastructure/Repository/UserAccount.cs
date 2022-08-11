@@ -1,4 +1,5 @@
 ﻿using MultiShop.Mvc.DataAccess.Infrastructure.IRepository;
+using MultiShop.Mvc.Models.Response;
 using MultiShop.Mvc.Models.ViewModels;
 using Newtonsoft.Json;
 using System;
@@ -29,12 +30,21 @@ namespace MultiShop.Mvc.DataAccess.Infrastructure.Repository
             return userCreate;
         }
 
-        public async Task<Login> Login(Login login)
+        public async Task<LoginResponse> Login(Login login)
         {
-            Login loginUser = null;
+            LoginResponse loginResponse = null;
             _httpClient.BaseAddress = new Uri("https://localhost:44398/");
             var response = await _httpClient.PostAsJsonAsync<Login>("api/UserAccountApi/LogIn", login);
-            return loginUser;
+            if (response.IsSuccessStatusCode)
+            {
+                var display = response.Content.ReadAsStringAsync().Result;
+                loginResponse = JsonConvert.DeserializeObject<LoginResponse>(display);
+                if (loginResponse.Email != null)
+                {
+                    GetEmail.Email = loginResponse.Email;
+                }
+            }
+            return loginResponse;
         }
 
         public async Task LogOut()
@@ -42,8 +52,22 @@ namespace MultiShop.Mvc.DataAccess.Infrastructure.Repository
             _httpClient.BaseAddress = new Uri("https://localhost:44398/");
             var test = await _httpClient.GetAsync("api/UserAccountApi/LogOut");
         }
+        public async Task<string> GetUserId(string email)
+        {
+            _httpClient.BaseAddress= new Uri("https://localhost:44398/");
+            var test = await _httpClient.GetAsync("api/UserAccountApi/GetUserId?email=" + email);
+            if (test.IsSuccessStatusCode)
+            {
+                var display = test.Content.ReadAsStringAsync().Result;
+                return display;
+                
+            }
+            return "";
 
-        
+
+        }
+
+
     }
 }
 

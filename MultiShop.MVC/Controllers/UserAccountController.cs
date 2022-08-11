@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MultiShop.Mvc.DataAccess.Infrastructure.IRepository;
+using MultiShop.Mvc.Models.Response;
 using MultiShop.Mvc.Models.ViewModels;
 using System.Threading.Tasks;
 
@@ -38,6 +39,11 @@ namespace MultiShop.MVC.Controllers
         {
             _userAccount.LogOut();
             return RedirectToAction("Index", "Order");
-        }     
+        }
+        public async Task<IActionResult> GetUserId()
+        {
+            var test = await _userAccount.GetUserId(GetEmail.Email);
+            return RedirectToAction("Index", "Order");
+        }
     }
 }

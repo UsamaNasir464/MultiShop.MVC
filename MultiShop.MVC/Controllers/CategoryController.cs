@@ -12,7 +12,6 @@ namespace MultiShop.MVC.Controllers
         public CategoryController(ICategoryConsumeApi consumeCategory)
         {
             _consumeCategory = consumeCategory;
-
         }
         public async Task<ActionResult> Index()
         {

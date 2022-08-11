@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using MultiShop.Mvc.Models.ViewModels;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 

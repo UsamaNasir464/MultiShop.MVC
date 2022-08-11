@@ -1,4 +1,6 @@
-﻿using MultiShop.Mvc.DataAccess.Infrastructure.IRepository;
+﻿using Microsoft.Extensions.Configuration;
+using MultiShop.Mvc.DataAccess.Infrastructure.IRepository;
+using MultiShop.Mvc.DataAccess.ServiceBus.Services;
 using MultiShop.Mvc.Models.ViewModels;
 using Newtonsoft.Json;
 using System;
@@ -9,23 +11,21 @@ using System.Threading.Tasks;
 
 namespace MultiShop.Mvc.DataAccess.Infrastructure.Repository
 {
-    public class CategoryConsumeApi : ICategoryConsumeApi
+    public class CategoryConsumeApi : BaseService, ICategoryConsumeApi 
     {
         private readonly HttpClient _httpClient;
 
-        public CategoryConsumeApi(HttpClient httpClient)
+        public CategoryConsumeApi(HttpClient httpClient, IConfiguration config) : base(config)
         {
             _httpClient = httpClient;
         }
         public async Task<List<Category>> GetAllCategory()
         {
             List<Category> categoryList = new List<Category>();
-            _httpClient.BaseAddress = new Uri("https://localhost:44398/");
-            var response = await _httpClient.GetAsync("api/CategoryApi/Index");
-            if (response.IsSuccessStatusCode)
+            var response = await CallApiAsync(_config.GetConnectionString("GetAllCategory"));
+            if (!string.IsNullOrEmpty(response))
             {
-                var result = response.Content.ReadAsStringAsync().Result;
-                categoryList = JsonConvert.DeserializeObject<List<Category>>(result);
+                categoryList = JsonConvert.DeserializeObject<List<Category>>(response);
             }
             return categoryList;
         }
@@ -33,12 +33,10 @@ namespace MultiShop.Mvc.DataAccess.Infrastructure.Repository
         public async Task<Category> GetCategoryById(int id)
         {
             Category category = null;
-            _httpClient.BaseAddress = new Uri("https://localhost:44398/");
-            var response = await _httpClient.GetAsync("api/CategoryApi/GetCategoryById/" + id.ToString());
-            if (response.IsSuccessStatusCode)
+            var response = await CallApiAsync(_config.GetConnectionString("GetCategoryById") + id.ToString());
+            if (!string.IsNullOrEmpty(response))
             {
-                var result = response.Content.ReadAsStringAsync().Result;
-                category = JsonConvert.DeserializeObject<Category>(result);
+                category = JsonConvert.DeserializeObject<Category>(response);
             }
             return category;
         }

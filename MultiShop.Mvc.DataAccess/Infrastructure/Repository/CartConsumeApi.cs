@@ -31,8 +31,8 @@ namespace MultiShop.Mvc.DataAccess.Infrastructure.Repository
         public async Task<CartDto> CreateCart(CartDto cartDto)
         {
             CartDto newCart = null;
-            _httpClient.BaseAddress = new Uri("https://localhost:44398/");
-            var response = await _httpClient.PostAsJsonAsync<CartDto>("api/CartApi/AddCart/", cartDto);
+            //_httpClient.BaseAddress = new Uri("https://localhost:44398/");
+            var response = await _httpClient.PostAsJsonAsync<object>("api/CartApi/AddCart", cartDto);
             if (response.IsSuccessStatusCode)
             {
                 var result = response.Content.ReadAsStringAsync().Result;

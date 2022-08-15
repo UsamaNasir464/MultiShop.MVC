@@ -2,10 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using MultiShop.Mvc.DataAccess.Infrastructure.IRepository;
 using MultiShop.Mvc.Models.Request;
-using System;
-using System.IO;
-using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Threading.Tasks;
 
 namespace MultiShop.MVC.Controllers
@@ -33,44 +29,10 @@ namespace MultiShop.MVC.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(ProductCreateRequest product)
         {
-             await _products.CreateProduct(product);
-
-            var file = product.ProductImage;
-            byte[] data;
-            string name = product.Name;
-            string description = product.Description;
-            string salePrice = product.SalePrice.ToString();
-            string discountPrice = product.DiscountPrice.ToString();
-            string catFId = product.CatFId.ToString();
-
-            //MultiPart For Uploading Content/Image
-            MultipartFormDataContent multiForm = new MultipartFormDataContent();
-            multiForm.Add(new StringContent(name), "Name");
-            multiForm.Add(new StringContent(description), "Description");
-            multiForm.Add(new StringContent(salePrice), "SalePrice");
-            multiForm.Add(new StringContent(discountPrice), "DiscountPrice");
-            multiForm.Add(new StringContent(catFId), "CatFId");
-
-            //adding list of images in the MultipartFormDataContent with same key
-            ByteArrayContent bytes;
-            using (var br = new BinaryReader(file.OpenReadStream()))
-            {
-                data = br.ReadBytes((int)file.OpenReadStream().Length);
-            }
-            bytes = new ByteArrayContent(data);
-            multiForm.Add(bytes, "ProductImage", product.ProductImage.FileName);
-
-            HttpClient client = new HttpClient();
-            client.BaseAddress = new Uri("https://localhost:44398/");
-            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            HttpResponseMessage httpResponseMessage = client.PostAsync("api/ProductApi/CreateProducts", multiForm).Result;
-            if (httpResponseMessage.IsSuccessStatusCode)
-            {
-                var response = httpResponseMessage.Content.ReadAsStringAsync().Result;
-            }
+            await _products.CreateProduct(product);
             return RedirectToAction("Index");
         }
-        
+
         [HttpGet]
         public async Task<IActionResult> Edit(int id)
         {

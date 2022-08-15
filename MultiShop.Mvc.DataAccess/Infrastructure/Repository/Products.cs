@@ -28,10 +28,15 @@ namespace MultiShop.Mvc.DataAccess.Infrastructure.Repository
             byte[] data;
             string Name = product.Name;
             string Description = product.Description;
+            string salePrice = product.SalePrice.ToString();
+            string discountPrice = product.DiscountPrice.ToString();
+            string catFId = product.CatFId.ToString();
 
             MultipartFormDataContent multiForm = new MultipartFormDataContent();
             multiForm.Add(new StringContent(Name), "Name");
             multiForm.Add(new StringContent(Description), "Description");
+            multiForm.Add(new StringContent(salePrice), "SalePrice");
+            multiForm.Add(new StringContent(discountPrice), "DiscountPrice");
             multiForm.Add(new StringContent("1"), "CatFId");
 
             //adding list of images in the MultipartFormDataContent with same key

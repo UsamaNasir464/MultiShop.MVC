@@ -28,7 +28,7 @@ namespace MultiShop.MVC.Controllers
         {
             return View(await _products.GetAllProducts());
         }
-        [HttpPost]
+       
         public async Task<IActionResult> Cart(int id, int count)
         {
             CartDto cartDto = new()
@@ -52,7 +52,7 @@ namespace MultiShop.MVC.Controllers
             var addToCart = await _cartConsumeApi.CreateCart(cartDto);
             if (addToCart != null)
             {
-                return RedirectToAction(nameof(Cart));
+                //return RedirectToAction(nameof(Cart));
             }
 
 

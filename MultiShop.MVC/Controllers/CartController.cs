@@ -1,5 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MultiShop.Mvc.DataAccess.Infrastructure.IRepository;
+using MultiShop.Mvc.Models.Response;
+using MultiShop.Mvc.Models.ViewModels;
+using System.Threading.Tasks;
 
 namespace MultiShop.MVC.Controllers
 {
@@ -14,6 +17,31 @@ namespace MultiShop.MVC.Controllers
             _productConsumeApi = productConsumeApi;
 
         }
+
+        private async Task<CartDto> LoadCartDtoBasedOnLoggedInUser()
+        {
+            var userId = GetEmailAndUserId.UserId;
+            var response = await _cartConsumeApi.GetCartByUserId(userId);
+
+            CartDto cartDto= new();
+            if (response != null)
+            {
+                if (cartDto?.CartHeader != null)
+                {
+                    foreach (var detail in cartDto.CartDetails)
+                    {
+                        cartDto.CartHeader.OrderTotal += (detail.Product.SalePrice * detail.Count);
+                    }
+
+                    
+                }
+            }
+
+            return cartDto;
+        }
+
+
+
 
         //public async Task<IActionResult> index(int id,int count)
         //{
@@ -37,9 +65,9 @@ namespace MultiShop.MVC.Controllers
         //    var addToCart = await _cartConsumeApi.CreateCart(cartDto);
         //    if (addToCart != null)
         //    {
-               
+
         //    }
-            
+
 
 
         //    return View();

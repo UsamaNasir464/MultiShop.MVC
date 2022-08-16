@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using MultiShop.Mvc.Models.ViewModels;
 using System.ComponentModel.DataAnnotations;
 
 namespace MultiShop.Mvc.Models.Request
@@ -26,5 +27,6 @@ namespace MultiShop.Mvc.Models.Request
         public IFormFile ProductImage { get; set; }
 
         public int CatFId { get; set; }
+        public virtual Category Category { get; set; }
     } 
 }

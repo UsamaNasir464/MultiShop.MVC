@@ -11,21 +11,23 @@ using System.Threading.Tasks;
 
 namespace MultiShop.Mvc.DataAccess.Infrastructure.Repository
 {
-    public class CategoryConsumeApi : BaseService, ICategoryConsumeApi 
+    public class CategoryConsumeApi : ICategoryConsumeApi
     {
         private readonly HttpClient _httpClient;
 
-        public CategoryConsumeApi(HttpClient httpClient, IConfiguration config) : base(config)
+        public CategoryConsumeApi(HttpClient httpClient)
         {
             _httpClient = httpClient;
         }
         public async Task<List<Category>> GetAllCategory()
         {
             List<Category> categoryList = new List<Category>();
-            var response = await CallApiAsync(_config.GetConnectionString("GetAllCategory"));
-            if (!string.IsNullOrEmpty(response))
+            _httpClient.BaseAddress = new Uri("https://localhost:44398/");
+            var response = await _httpClient.GetAsync("api/CategoryApi/Index");
+            if (response.IsSuccessStatusCode)
             {
-                categoryList = JsonConvert.DeserializeObject<List<Category>>(response);
+                var result = response.Content.ReadAsStringAsync().Result;
+                categoryList = JsonConvert.DeserializeObject<List<Category>>(result);
             }
             return categoryList;
         }
@@ -33,10 +35,12 @@ namespace MultiShop.Mvc.DataAccess.Infrastructure.Repository
         public async Task<Category> GetCategoryById(int id)
         {
             Category category = null;
-            var response = await CallApiAsync(_config.GetConnectionString("GetCategoryById") + id.ToString());
-            if (!string.IsNullOrEmpty(response))
+            _httpClient.BaseAddress = new Uri("https://localhost:44398/");
+            var response = await _httpClient.GetAsync("api/CategoryApi/GetCategoryById/" + id.ToString());
+            if (response.IsSuccessStatusCode)
             {
-                category = JsonConvert.DeserializeObject<Category>(response);
+                var result = response.Content.ReadAsStringAsync().Result;
+                category = JsonConvert.DeserializeObject<Category>(result);
             }
             return category;
         }

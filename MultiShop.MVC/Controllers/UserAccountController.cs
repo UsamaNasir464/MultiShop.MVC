@@ -32,12 +32,14 @@ namespace MultiShop.MVC.Controllers
         [HttpPost]
         public async Task<IActionResult> Login(Login login)
         {
-            await _userAccount.Login(login);
+            var loggedin=await _userAccount.Login(login);
+            var test = await _userAccount.GetUserId(GetEmailAndUserId.Email);
             return RedirectToAction("Index", "Product");
         }
         public IActionResult LogOut()
         {
             _userAccount.LogOut();
+            GetEmailAndUserId.UserId = null;
             return RedirectToAction("Index", "Order");
         }
         public async Task<IActionResult> GetUserId()

@@ -2,6 +2,7 @@
 using MultiShop.Mvc.DataAccess.Infrastructure.IRepository;
 using MultiShop.Mvc.Models.Response;
 using MultiShop.Mvc.Models.ViewModels;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace MultiShop.MVC.Controllers
@@ -18,25 +19,47 @@ namespace MultiShop.MVC.Controllers
 
         }
 
+        public async Task<IActionResult> CartIndex()
+        {
+            
+            return View(await LoadCartDtoBasedOnLoggedInUser());
+        }
+
+        public async Task<IActionResult> Remove(int cartDetailId)
+        {
+            var userId = GetEmailAndUserId.UserId;
+            var response = await _cartConsumeApi.RemoveFromCart(cartDetailId);
+            if (response)
+            {
+                return RedirectToAction("CartIndex");
+            }
+            return View();
+        }
+
+
+
         private async Task<CartDto> LoadCartDtoBasedOnLoggedInUser()
         {
             var userId = GetEmailAndUserId.UserId;
             var response = await _cartConsumeApi.GetCartByUserId(userId);
 
-            CartDto cartDto= new();
+            CartDto cartDto = new();
+            
+
             if (response != null)
             {
+                cartDto.CartDetails = response.CartDetails;
+                cartDto.CartHeader = response.CartHeader;
                 if (cartDto?.CartHeader != null)
                 {
                     foreach (var detail in cartDto.CartDetails)
                     {
-                        cartDto.CartHeader.OrderTotal += (detail.Product.SalePrice * detail.Count);
+                        var product = await _productConsumeApi.GetProductsByID(detail.ProductFId);
+                        detail.Product = product;
+                        cartDto.CartHeader.OrderTotal += product.SalePrice * detail.Count;
                     }
-
-                    
                 }
             }
-
             return cartDto;
         }
 

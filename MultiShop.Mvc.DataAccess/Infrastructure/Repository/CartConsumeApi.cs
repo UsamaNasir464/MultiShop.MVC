@@ -62,15 +62,21 @@ namespace MultiShop.Mvc.DataAccess.Infrastructure.Repository
             if (response.IsSuccessStatusCode)
             {
                 var result = response.Content.ReadAsStringAsync().Result;
-                cartDto = JsonConvert.DeserializeObject<CartDto>(result);
+                var test = JsonConvert.DeserializeObject<ResponseDto>(result);
+                if (test.IsSuccess) { 
+                cartDto= JsonConvert.DeserializeObject<CartDto>(test.Result.ToString());
+                }
             }
             return cartDto;
         }
 
         public async Task<bool> RemoveFromCart(int cartDetailsId)
         {
+            if (_httpClient.BaseAddress == null) 
+            { 
             _httpClient.BaseAddress = new Uri("https://localhost:44398/");
-            var response = await _httpClient.DeleteAsync("api/CartApi/RemoveCart/" + cartDetailsId.ToString());
+            }
+            var response = await _httpClient.GetAsync("/api/CartApi/" + cartDetailsId.ToString());
             if (response.IsSuccessStatusCode)
             {
                 return true;

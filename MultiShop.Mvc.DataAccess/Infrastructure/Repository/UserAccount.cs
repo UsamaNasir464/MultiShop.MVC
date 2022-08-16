@@ -33,7 +33,10 @@ namespace MultiShop.Mvc.DataAccess.Infrastructure.Repository
         public async Task<LoginResponse> Login(Login login)
         {
             LoginResponse loginResponse = null;
+            if (_httpClient.BaseAddress == null) 
+            { 
             _httpClient.BaseAddress = new Uri("https://localhost:44398/");
+            }
             var response = await _httpClient.PostAsJsonAsync<Login>("api/UserAccountApi/LogIn", login);
             if (response.IsSuccessStatusCode)
             {
@@ -54,7 +57,10 @@ namespace MultiShop.Mvc.DataAccess.Infrastructure.Repository
         }
         public async Task<string> GetUserId(string email)
         {
-            _httpClient.BaseAddress = new Uri("https://localhost:44398/");
+            if (_httpClient.BaseAddress == null)
+            {
+                _httpClient.BaseAddress = new Uri("https://localhost:44398/");
+            }
             var test = await _httpClient.GetAsync("api/UserAccountApi/GetUserId?email=" + email);
             if (test.IsSuccessStatusCode)
             {

@@ -54,9 +54,6 @@ namespace MultiShop.MVC.Controllers
             {
                 return RedirectToAction("CartIndex", "Cart");
             }
-
-
-
             return View();
         }
         public IActionResult Shop()

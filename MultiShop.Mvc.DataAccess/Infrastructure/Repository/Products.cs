@@ -61,7 +61,10 @@ namespace MultiShop.Mvc.DataAccess.Infrastructure.Repository
 
         public bool DeleteProduct(int id)
         {
-            _httpClient.BaseAddress = new Uri("https://localhost:44398/");
+            if (_httpClient.BaseAddress == null)
+            {
+                _httpClient.BaseAddress = new Uri("https://localhost:44398/");
+            }
             var response = _httpClient.DeleteAsync("api/ProductApi/DeleteProducts/" + id.ToString());
             response.Wait();
             var test = response.Result;
@@ -75,7 +78,10 @@ namespace MultiShop.Mvc.DataAccess.Infrastructure.Repository
         public async Task<ProductEditRequest> EditProduct(ProductEditRequest product)
         {
             ProductEditRequest productsEdit = null;
-            _httpClient.BaseAddress = new Uri("https://localhost:44398/");
+            if (_httpClient.BaseAddress == null)
+            {
+                _httpClient.BaseAddress = new Uri("https://localhost:44398/");
+            }
             var response = await _httpClient.PutAsJsonAsync<ProductEditRequest>("api/ProductApi/EditProducts", product);
             if (response.IsSuccessStatusCode)
             {
@@ -88,7 +94,10 @@ namespace MultiShop.Mvc.DataAccess.Infrastructure.Repository
         public async Task<List<Product>> GetAllProducts()
         {
             List<Product> products = new List<Product>();
-            _httpClient.BaseAddress = new Uri("https://localhost:44398/");
+            if (_httpClient.BaseAddress == null)
+            {
+                _httpClient.BaseAddress = new Uri("https://localhost:44398/");
+            }
             var response = await _httpClient.GetAsync("api/ProductApi/GetProductsList");
             if (response.IsSuccessStatusCode)
             {
@@ -105,7 +114,6 @@ namespace MultiShop.Mvc.DataAccess.Infrastructure.Repository
             {
                 _httpClient.BaseAddress = new Uri("https://localhost:44398/");
             }
-            
             var response = await _httpClient.GetAsync("api/ProductApi/GetProductsById/" + id.ToString());
             if (response.IsSuccessStatusCode)
             {

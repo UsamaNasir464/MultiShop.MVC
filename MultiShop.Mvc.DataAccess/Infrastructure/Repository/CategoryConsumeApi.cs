@@ -1,6 +1,4 @@
-﻿using Microsoft.Extensions.Configuration;
-using MultiShop.Mvc.DataAccess.Infrastructure.IRepository;
-using MultiShop.Mvc.DataAccess.ServiceBus.Services;
+﻿using MultiShop.Mvc.DataAccess.Infrastructure.IRepository;
 using MultiShop.Mvc.Models.ViewModels;
 using Newtonsoft.Json;
 using System;
@@ -22,7 +20,10 @@ namespace MultiShop.Mvc.DataAccess.Infrastructure.Repository
         public async Task<List<Category>> GetAllCategory()
         {
             List<Category> categoryList = new List<Category>();
-            _httpClient.BaseAddress = new Uri("https://localhost:44398/");
+            if (_httpClient.BaseAddress == null)
+            {
+                _httpClient.BaseAddress = new Uri("https://localhost:44398/");
+            }
             var response = await _httpClient.GetAsync("api/CategoryApi/Index");
             if (response.IsSuccessStatusCode)
             {
@@ -35,7 +36,10 @@ namespace MultiShop.Mvc.DataAccess.Infrastructure.Repository
         public async Task<Category> GetCategoryById(int id)
         {
             Category category = null;
-            _httpClient.BaseAddress = new Uri("https://localhost:44398/");
+            if (_httpClient.BaseAddress == null)
+            {
+                _httpClient.BaseAddress = new Uri("https://localhost:44398/");
+            }
             var response = await _httpClient.GetAsync("api/CategoryApi/GetCategoryById/" + id.ToString());
             if (response.IsSuccessStatusCode)
             {
@@ -48,7 +52,10 @@ namespace MultiShop.Mvc.DataAccess.Infrastructure.Repository
         public async Task<Category> CreateCategory(Category category)
         {
             Category newCategory = null;
-            _httpClient.BaseAddress = new Uri("https://localhost:44398/");
+            if (_httpClient.BaseAddress == null)
+            {
+                _httpClient.BaseAddress = new Uri("https://localhost:44398/");
+            }
             var response = await _httpClient.PostAsJsonAsync<Category>("api/CategoryApi/CreateCategory/", category);
             if (response.IsSuccessStatusCode)
             {
@@ -62,7 +69,10 @@ namespace MultiShop.Mvc.DataAccess.Infrastructure.Repository
         public async Task<Category> EditCategory(Category category)
         {
             Category updateCategory = null;
-            _httpClient.BaseAddress = new Uri("https://localhost:44398/");
+            if (_httpClient.BaseAddress == null)
+            {
+                _httpClient.BaseAddress = new Uri("https://localhost:44398/");
+            }
             var response = await _httpClient.PostAsJsonAsync<Category>("api/CategoryApi/UpdateCategory", category);
             if (response.IsSuccessStatusCode)
             {
@@ -74,7 +84,10 @@ namespace MultiShop.Mvc.DataAccess.Infrastructure.Repository
 
         public bool DeleteCategory(int id)
         {
-            _httpClient.BaseAddress = new Uri("https://localhost:44398/");
+            if (_httpClient.BaseAddress == null)
+            {
+                _httpClient.BaseAddress = new Uri("https://localhost:44398/");
+            }
             var response = _httpClient.DeleteAsync("api/CategoryApi/DeleteCategoryById/" + id.ToString());
             response.Wait();
             var test = response.Result;

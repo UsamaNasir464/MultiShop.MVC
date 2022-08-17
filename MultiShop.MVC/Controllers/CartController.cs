@@ -1,8 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MultiShop.Mvc.DataAccess.Infrastructure.IRepository;
+using MultiShop.Mvc.DataAccess.ServiceBus.EmailService;
+using MultiShop.Mvc.Models.Request;
 using MultiShop.Mvc.Models.Response;
 using MultiShop.Mvc.Models.ViewModels;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace MultiShop.MVC.Controllers
@@ -11,18 +12,76 @@ namespace MultiShop.MVC.Controllers
     {
         private readonly ICartConsumeApi _cartConsumeApi;
         private readonly IProducts _productConsumeApi;
+        private readonly IOrderConsumeApi _orderConsumeApi;
+        private readonly IOrderDetailsConsuumeApi _orderDetail;
+        private readonly IEmailSending _emailSending;
 
-        public CartController(ICartConsumeApi cartConsumeApi, IProducts productConsumeApi)
+        public CartController(ICartConsumeApi cartConsumeApi, IProducts productConsumeApi, IOrderConsumeApi orderConsumeApi
+            , IOrderDetailsConsuumeApi orderDetail, IEmailSending emailSending)
         {
             _cartConsumeApi = cartConsumeApi;
             _productConsumeApi = productConsumeApi;
-
+            _orderConsumeApi = orderConsumeApi;
+            _orderDetail = orderDetail;
+            _emailSending = emailSending;
         }
 
         public async Task<IActionResult> CartIndex()
         {
             
             return View(await LoadCartDtoBasedOnLoggedInUser());
+        }
+
+        public async Task<IActionResult> Checkout()
+        {
+            OrderAndCartDto orderAndCart = new();
+            var response = await LoadCartDtoBasedOnLoggedInUser();
+           
+
+
+            return View(response);
+        }
+
+        [HttpPost]
+
+        public async Task<IActionResult> Checkout(CartDto orderCart)
+        {
+            var userId = GetEmailAndUserId.UserId;
+            var response = await _cartConsumeApi.GetCartByUserId(userId);
+            CartDto cartDto = new();
+            cartDto.CartDetails = response.CartDetails;
+            cartDto.CartHeader = response.CartHeader;
+            foreach (var detail in cartDto.CartDetails)
+            {
+                var product = await _productConsumeApi.GetProductsByID(detail.ProductFId);
+                detail.Product = product;
+                cartDto.CartHeader.OrderTotal += product.SalePrice * detail.Count;
+            }
+            OrderCreateRequest order = new();
+            order.PaymentMethod = "Cod";
+            order.OrderDate = System.DateTime.Now;
+            order.OrderType = "Sale";
+            order.GrandTotal = (cartDto.CartHeader.OrderTotal + (cartDto.CartHeader.OrderTotal/100));
+            order.Address = orderCart.Order.Address;
+            order.CustomerName = orderCart.Order.CustomerName;
+            order.Email = orderCart.Order.Email;
+            order.PhoneNumber = orderCart.Order.PhoneNumber;
+            order.UserFid = userId;
+            
+            var test=await _orderConsumeApi.CreateOrder(order);
+            OrderDetailsCreateRequest orderdetail = new();
+            foreach (var item in cartDto.CartDetails)
+            {
+                orderdetail.ProductFId = item.ProductFId;
+                orderdetail.OrderFId = test.Order.Id;
+                orderdetail.ProductQuantity = item.Count;
+                orderdetail.SalePrice = item.Product.SalePrice;
+                orderdetail.TotalPrice = item.Product.SalePrice * item.Count;
+                var result=await _orderDetail.CreateOrderDetails(orderdetail);
+            }
+            await _cartConsumeApi.ClearCart(userId);
+           await _emailSending.SendMessageAsync(order, "auxiliumnayatel");
+            return RedirectToAction("index","Home");
         }
 
         public async Task<IActionResult> Remove(int cartDetailId)
@@ -50,6 +109,7 @@ namespace MultiShop.MVC.Controllers
             {
                 cartDto.CartDetails = response.CartDetails;
                 cartDto.CartHeader = response.CartHeader;
+                
                 if (cartDto?.CartHeader != null)
                 {
                     foreach (var detail in cartDto.CartDetails)

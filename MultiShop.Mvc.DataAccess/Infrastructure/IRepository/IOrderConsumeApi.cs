@@ -1,4 +1,5 @@
 ﻿using MultiShop.Mvc.Models.Request;
+using MultiShop.Mvc.Models.Response;
 using MultiShop.Mvc.Models.ViewModels;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -9,7 +10,7 @@ namespace MultiShop.Mvc.DataAccess.Infrastructure.IRepository
     {
         Task<List<Order>> GetAllOrders();
         Task<Order> GetOrderById(int id);
-        Task<OrderCreateRequest> CreateOrder(OrderCreateRequest order);
+        Task<CreateOrderResponse> CreateOrder(OrderCreateRequest order);
         bool DeleteOrder(int id);
         Task<OrderEditRequest> EditOrder(OrderEditRequest order);
     }

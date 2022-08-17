@@ -21,9 +21,10 @@ namespace MultiShop.MVC.IOC
             builder.RegisterType<Products>().As<IProducts>().InstancePerLifetimeScope();
             builder.RegisterType<HttpClient>().As<HttpClient>().InstancePerLifetimeScope();
             builder.RegisterType<CartConsumeApi>().As<ICartConsumeApi>().InstancePerLifetimeScope();
-           
+            builder.RegisterType<OrderDetailsConsumeApi>().As<IOrderDetailsConsuumeApi>().InstancePerLifetimeScope();
 
-            
+
+
             builder.Populate(services);
             var container = builder.Build();
             return container;

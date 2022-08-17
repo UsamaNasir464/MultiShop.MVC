@@ -11,7 +11,7 @@ namespace MultiShop.Mvc.Models.Request
 
         public string Email { get; set; }
 
-
+        [Required(ErrorMessage = "Customer Name Is Required"), Display(Name = "Customer Name")]
         public string CustomerName { get; set; }
         [Required(ErrorMessage = "Phone Number Is Required"), Display(Name = "Phone #")]
         public string PhoneNumber { get; set; }
@@ -21,7 +21,7 @@ namespace MultiShop.Mvc.Models.Request
         public string Address { get; set; }
 
         public string PaymentMethod { get; set; }
-        public double GrandTotal { get; set; }
+        public decimal GrandTotal { get; set; }
 
         public DateTime OrderDate { get; set; }
 
@@ -31,7 +31,7 @@ namespace MultiShop.Mvc.Models.Request
 
         public string OrderType { get; set; }
 
-        //public Guid UserFid { get; set; }
+        public string UserFid { get; set; }
 
         //public int ProductFId { get; set; }
 

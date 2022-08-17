@@ -1,5 +1,6 @@
 ﻿using MultiShop.Mvc.DataAccess.Infrastructure.IRepository;
 using MultiShop.Mvc.Models.Request;
+using MultiShop.Mvc.Models.Response;
 using MultiShop.Mvc.Models.ViewModels;
 using Newtonsoft.Json;
 using System;
@@ -49,9 +50,9 @@ namespace MultiShop.Mvc.DataAccess.Infrastructure.Repository
             return order;
         }
 
-        public async Task<OrderCreateRequest> CreateOrder(OrderCreateRequest order)
+        public async Task<CreateOrderResponse> CreateOrder(OrderCreateRequest order)
         {
-            OrderCreateRequest neworder = null;
+            CreateOrderResponse neworder = null;
             if (_httpClient.BaseAddress == null)
             {
                 _httpClient.BaseAddress = new Uri("https://localhost:44398/");
@@ -60,7 +61,7 @@ namespace MultiShop.Mvc.DataAccess.Infrastructure.Repository
             if (response.IsSuccessStatusCode)
             {
                 var result = response.Content.ReadAsStringAsync().Result;
-                neworder = JsonConvert.DeserializeObject<OrderCreateRequest>(result);
+                neworder = JsonConvert.DeserializeObject<CreateOrderResponse>(result);
             }
             return neworder;
         }

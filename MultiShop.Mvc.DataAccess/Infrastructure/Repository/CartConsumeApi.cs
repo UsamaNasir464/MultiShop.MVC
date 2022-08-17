@@ -22,7 +22,8 @@ namespace MultiShop.Mvc.DataAccess.Infrastructure.Repository
             {
                 _httpClient.BaseAddress = new Uri("https://localhost:44398/");
             }
-            var response = await _httpClient.DeleteAsync("api/CartApi/ClearCart/" + userId);
+            
+            var response = await _httpClient.GetAsync("api/CartApi/ClearCart/" + userId);
             if (response.IsSuccessStatusCode)
             {
                 return true;

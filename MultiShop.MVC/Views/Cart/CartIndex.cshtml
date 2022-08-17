@@ -75,7 +75,7 @@
                         <h5>Total</h5>
                         <h5>@(Model.CartHeader.OrderTotal + (Model.CartHeader.OrderTotal / 100))</h5>
                     </div>
-                    <button class="btn btn-block btn-primary font-weight-bold my-3 py-3">Proceed To Checkout</button>
+                    <a type="button" asp-action="Checkout" asp-controller="Cart" class="btn btn-block btn-primary font-weight-bold my-3 py-3">Proceed To Checkout</a>
                 </div>
             </div>
         </div>

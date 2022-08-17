@@ -18,7 +18,10 @@ namespace MultiShop.Mvc.DataAccess.Infrastructure.Repository
         }
         public async Task<bool> ClearCart(string userId)
         {
-            _httpClient.BaseAddress = new Uri("https://localhost:44398/");
+            if (_httpClient.BaseAddress == null)
+            {
+                _httpClient.BaseAddress = new Uri("https://localhost:44398/");
+            }
             var response = await _httpClient.DeleteAsync("api/CartApi/ClearCart/" + userId);
             if (response.IsSuccessStatusCode)
             {
@@ -31,7 +34,10 @@ namespace MultiShop.Mvc.DataAccess.Infrastructure.Repository
         public async Task<CartDto> CreateCart(CartDto cartDto)
         {
             CartDto newCart = null;
-            //_httpClient.BaseAddress = new Uri("https://localhost:44398/");
+            if (_httpClient.BaseAddress == null)
+            {
+                _httpClient.BaseAddress = new Uri("https://localhost:44398/");
+            }
             var response = await _httpClient.PostAsJsonAsync<object>("api/CartApi/AddCart", cartDto);
             if (response.IsSuccessStatusCode)
             {
@@ -43,7 +49,10 @@ namespace MultiShop.Mvc.DataAccess.Infrastructure.Repository
         public async Task<CartDto> UpdateCart(CartDto cartDto)
         {
             CartDto newCart = null;
-            _httpClient.BaseAddress = new Uri("https://localhost:44398/");
+            if (_httpClient.BaseAddress == null)
+            {
+                _httpClient.BaseAddress = new Uri("https://localhost:44398/");
+            }
             var response = await _httpClient.PostAsJsonAsync<CartDto>("api/CartApi/UpdateCart/", cartDto);
             if (response.IsSuccessStatusCode)
             {
@@ -56,21 +65,30 @@ namespace MultiShop.Mvc.DataAccess.Infrastructure.Repository
         public async Task<CartDto> GetCartByUserId(string userId)
         {
             CartDto cartDto = null;
-            _httpClient.BaseAddress = new Uri("https://localhost:44398/");
+            if (_httpClient.BaseAddress == null)
+            {
+                _httpClient.BaseAddress = new Uri("https://localhost:44398/");
+            }
             var response = await _httpClient.GetAsync("api/CartApi/GetCart/" + userId.ToString());
-
             if (response.IsSuccessStatusCode)
             {
                 var result = response.Content.ReadAsStringAsync().Result;
-                cartDto = JsonConvert.DeserializeObject<CartDto>(result);
+                var test = JsonConvert.DeserializeObject<ResponseDto>(result);
+                if (test.IsSuccess)
+                {
+                    cartDto = JsonConvert.DeserializeObject<CartDto>(test.Result.ToString());
+                }
             }
             return cartDto;
         }
 
         public async Task<bool> RemoveFromCart(int cartDetailsId)
         {
-            _httpClient.BaseAddress = new Uri("https://localhost:44398/");
-            var response = await _httpClient.DeleteAsync("api/CartApi/RemoveCart/" + cartDetailsId.ToString());
+            if (_httpClient.BaseAddress == null)
+            {
+                _httpClient.BaseAddress = new Uri("https://localhost:44398/");
+            }
+            var response = await _httpClient.GetAsync("/api/CartApi/" + cartDetailsId.ToString());
             if (response.IsSuccessStatusCode)
             {
                 return true;

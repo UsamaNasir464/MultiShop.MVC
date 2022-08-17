@@ -37,7 +37,7 @@ namespace MultiShop.Mvc.DataAccess.Infrastructure.Repository
             multiForm.Add(new StringContent(Description), "Description");
             multiForm.Add(new StringContent(salePrice), "SalePrice");
             multiForm.Add(new StringContent(discountPrice), "DiscountPrice");
-            multiForm.Add(new StringContent("1"), "CatFId");
+            multiForm.Add(new StringContent(catFId), "CatFId");
 
             //adding list of images in the MultipartFormDataContent with same key
             ByteArrayContent bytes;
@@ -61,7 +61,10 @@ namespace MultiShop.Mvc.DataAccess.Infrastructure.Repository
 
         public bool DeleteProduct(int id)
         {
-            _httpClient.BaseAddress = new Uri("https://localhost:44398/");
+            if (_httpClient.BaseAddress == null)
+            {
+                _httpClient.BaseAddress = new Uri("https://localhost:44398/");
+            }
             var response = _httpClient.DeleteAsync("api/ProductApi/DeleteProducts/" + id.ToString());
             response.Wait();
             var test = response.Result;
@@ -75,7 +78,10 @@ namespace MultiShop.Mvc.DataAccess.Infrastructure.Repository
         public async Task<ProductEditRequest> EditProduct(ProductEditRequest product)
         {
             ProductEditRequest productsEdit = null;
-            _httpClient.BaseAddress = new Uri("https://localhost:44398/");
+            if (_httpClient.BaseAddress == null)
+            {
+                _httpClient.BaseAddress = new Uri("https://localhost:44398/");
+            }
             var response = await _httpClient.PutAsJsonAsync<ProductEditRequest>("api/ProductApi/EditProducts", product);
             if (response.IsSuccessStatusCode)
             {
@@ -88,13 +94,15 @@ namespace MultiShop.Mvc.DataAccess.Infrastructure.Repository
         public async Task<List<Product>> GetAllProducts()
         {
             List<Product> products = new List<Product>();
-            _httpClient.BaseAddress = new Uri("https://localhost:44398/");
+            if (_httpClient.BaseAddress == null)
+            {
+                _httpClient.BaseAddress = new Uri("https://localhost:44398/");
+            }
             var response = await _httpClient.GetAsync("api/ProductApi/GetProductsList");
             if (response.IsSuccessStatusCode)
             {
                 var display = response.Content.ReadAsStringAsync().Result;
                 products = JsonConvert.DeserializeObject<List<Product>>(display);
-
             }
             return products;
         }
@@ -102,7 +110,10 @@ namespace MultiShop.Mvc.DataAccess.Infrastructure.Repository
         public async Task<Product> GetProductsByID(int id)
         {
             Product product = null;
-            _httpClient.BaseAddress = new Uri("https://localhost:44398/");
+            if (_httpClient.BaseAddress == null)
+            {
+                _httpClient.BaseAddress = new Uri("https://localhost:44398/");
+            }
             var response = await _httpClient.GetAsync("api/ProductApi/GetProductsById/" + id.ToString());
             if (response.IsSuccessStatusCode)
             {

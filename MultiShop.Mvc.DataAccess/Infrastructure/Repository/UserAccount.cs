@@ -20,12 +20,16 @@ namespace MultiShop.Mvc.DataAccess.Infrastructure.Repository
         public async Task<User> CreateUserAsync(User user)
         {
             User userCreate = null;
-            _httpClient.BaseAddress = new Uri("https://localhost:44398/");
+            if (_httpClient.BaseAddress == null)
+            {
+                _httpClient.BaseAddress = new Uri("https://localhost:44398/");
+            }
             var response = await _httpClient.PostAsJsonAsync<User>("api/UserAccountApi/Register", user);
             if (response.IsSuccessStatusCode)
             {
                 var display = response.Content.ReadAsStringAsync().Result;
                 userCreate = JsonConvert.DeserializeObject<User>(display);
+                GetEmailAndUserId.Email = user.Email;
             }
             return userCreate;
         }
@@ -33,7 +37,10 @@ namespace MultiShop.Mvc.DataAccess.Infrastructure.Repository
         public async Task<LoginResponse> Login(Login login)
         {
             LoginResponse loginResponse = null;
-            _httpClient.BaseAddress = new Uri("https://localhost:44398/");
+            if (_httpClient.BaseAddress == null)
+            {
+                _httpClient.BaseAddress = new Uri("https://localhost:44398/");
+            }
             var response = await _httpClient.PostAsJsonAsync<Login>("api/UserAccountApi/LogIn", login);
             if (response.IsSuccessStatusCode)
             {
@@ -49,12 +56,18 @@ namespace MultiShop.Mvc.DataAccess.Infrastructure.Repository
 
         public async Task LogOut()
         {
-            _httpClient.BaseAddress = new Uri("https://localhost:44398/");
+            if (_httpClient.BaseAddress == null)
+            {
+                _httpClient.BaseAddress = new Uri("https://localhost:44398/");
+            }
             var test = await _httpClient.GetAsync("api/UserAccountApi/LogOut");
         }
         public async Task<string> GetUserId(string email)
         {
-            _httpClient.BaseAddress = new Uri("https://localhost:44398/");
+            if (_httpClient.BaseAddress == null)
+            {
+                _httpClient.BaseAddress = new Uri("https://localhost:44398/");
+            }
             var test = await _httpClient.GetAsync("api/UserAccountApi/GetUserId?email=" + email);
             if (test.IsSuccessStatusCode)
             {

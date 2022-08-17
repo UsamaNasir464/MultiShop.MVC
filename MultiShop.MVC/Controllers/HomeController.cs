@@ -52,11 +52,8 @@ namespace MultiShop.MVC.Controllers
             var addToCart = await _cartConsumeApi.CreateCart(cartDto);
             if (addToCart != null)
             {
-                //return RedirectToAction(nameof(Cart));
+                return RedirectToAction("CartIndex", "Cart");
             }
-
-
-
             return View();
         }
         public IActionResult Shop()

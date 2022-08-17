@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Mvc;
 using MultiShop.Mvc.DataAccess.Infrastructure.IRepository;
 using MultiShop.Mvc.Models.Request;
+using MultiShop.Mvc.Models.ViewModels;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace MultiShop.MVC.Controllers
@@ -10,10 +12,12 @@ namespace MultiShop.MVC.Controllers
     {
         private readonly IProducts _products;
         private readonly IWebHostEnvironment _hostEnvironment;
-        public ProductController(IProducts products, IWebHostEnvironment hostEnvironment)
+        private readonly ICategoryConsumeApi _consumeCategory;
+        public ProductController(IProducts products, IWebHostEnvironment hostEnvironment , ICategoryConsumeApi consumeCategory)
         {
             _products = products;
             _hostEnvironment = hostEnvironment;
+            _consumeCategory = consumeCategory;
         }
         [HttpGet]
         public async Task<IActionResult> Index()

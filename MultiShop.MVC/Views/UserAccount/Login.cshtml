@@ -1,14 +1,16 @@
 ﻿@model MultiShop.Mvc.Models.ViewModels.Login
 
 @{
-    ViewData["Title"] = "Login";
+    Layout = "~/Views/Shared/_LayoutCustomer.cshtml";
 }
-
-<h1>Login</h1>
-
-<h4>Login</h4>
-<hr />
 <div class="row">
+    <div class="col-4 d-flex justify-content-center text-center">
+        <h1>Login</h1>
+    </div>
+ 
+</div>
+<hr/>
+<div>
     <div class="col-md-4">
         <form asp-action="Login">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
@@ -28,15 +30,17 @@
                 </label>
             </div>
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <input type="submit" value="Login" class="btn btn-primary" />
             </div>
         </form>
+        <div>
+            <p>If not Register Yet .Please    <a asp-action="Register" asp-controller="UserAccount" style="color:black">Click Here</a></p>
+       
+        </div>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

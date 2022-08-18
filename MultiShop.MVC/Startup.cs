@@ -21,12 +21,18 @@ namespace MultiShop.MVC
         // This method gets called by the runtime. Use this method to add services to the container.
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
+            //services.ConfigureApplicationCookie(config =>
+            //{
+            //    config.LoginPath = "/login";
+
+            //});
             services.AddControllers();
             services.AddControllersWithViews();
             var container = AutofacSetup.GetServices(services);
+           
             return new AutofacServiceProvider(container);
 
-
+            
 
         }
 

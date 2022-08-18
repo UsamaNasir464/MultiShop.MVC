@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using MultiShop.Mvc.DataAccess.Infrastructure.IRepository;
 using MultiShop.Mvc.DataAccess.ServiceBus.EmailService;
 using MultiShop.Mvc.Models.Request;
@@ -25,7 +26,7 @@ namespace MultiShop.MVC.Controllers
             _orderDetail = orderDetail;
             _emailSending = emailSending;
         }
-
+      
         public async Task<IActionResult> CartIndex()
         {
             

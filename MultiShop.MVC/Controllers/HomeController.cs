@@ -26,6 +26,7 @@ namespace MultiShop.MVC.Controllers
       
         public async Task<IActionResult> Index()
         {
+
             return View(await _products.GetAllProducts());
         }
        

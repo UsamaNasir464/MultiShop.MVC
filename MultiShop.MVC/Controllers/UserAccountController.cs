@@ -24,7 +24,7 @@ namespace MultiShop.MVC.Controllers
         {
             await _userAccount.CreateUserAsync(user);
             var userId = await _userAccount.GetUserId(GetEmailAndUserId.Email);
-            return RedirectToAction("Index", "Product");
+            return RedirectToAction("Index", "Home");
         }
         public ActionResult Login()
         {
@@ -35,14 +35,14 @@ namespace MultiShop.MVC.Controllers
         {
             var loggedin=await _userAccount.Login(login);
             var test = await _userAccount.GetUserId(GetEmailAndUserId.Email);
-            return RedirectToAction("Index", "Product");
+            return RedirectToAction("Index", "Home");
         }
         public IActionResult LogOut()
         {
             _userAccount.LogOut();
             GetEmailAndUserId.UserId = null;
             GetEmailAndUserId.Email = null;
-            return RedirectToAction("Index", "Order");
+            return RedirectToAction("Index", "Home");
         }
         public async Task<IActionResult> GetUserId()
         {

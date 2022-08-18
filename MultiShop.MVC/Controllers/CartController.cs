@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using MultiShop.Mvc.DataAccess.Infrastructure.IRepository;
 using MultiShop.Mvc.DataAccess.ServiceBus.EmailService;
 using MultiShop.Mvc.Models.Request;
@@ -15,30 +16,39 @@ namespace MultiShop.MVC.Controllers
         private readonly IOrderConsumeApi _orderConsumeApi;
         private readonly IOrderDetailsConsuumeApi _orderDetail;
         private readonly IEmailSending _emailSending;
+        protected readonly IConfiguration _config;
+        
+
+
 
         public CartController(ICartConsumeApi cartConsumeApi, IProducts productConsumeApi, IOrderConsumeApi orderConsumeApi
-            , IOrderDetailsConsuumeApi orderDetail, IEmailSending emailSending)
+            , IOrderDetailsConsuumeApi orderDetail, IEmailSending emailSending, IConfiguration config )
         {
             _cartConsumeApi = cartConsumeApi;
             _productConsumeApi = productConsumeApi;
             _orderConsumeApi = orderConsumeApi;
             _orderDetail = orderDetail;
             _emailSending = emailSending;
+            _config = config;
         }
 
         public async Task<IActionResult> CartIndex()
         {
-            
+
             return View(await LoadCartDtoBasedOnLoggedInUser());
         }
+        public IActionResult CartUrl()
+        {
+            return RedirectToAction("CartIndex");
+        }
+
+
+
 
         public async Task<IActionResult> Checkout()
         {
             OrderAndCartDto orderAndCart = new();
             var response = await LoadCartDtoBasedOnLoggedInUser();
-           
-
-
             return View(response);
         }
 
@@ -61,14 +71,14 @@ namespace MultiShop.MVC.Controllers
             order.PaymentMethod = "Cod";
             order.OrderDate = System.DateTime.Now;
             order.OrderType = "Sale";
-            order.GrandTotal = (cartDto.CartHeader.OrderTotal + (cartDto.CartHeader.OrderTotal/100));
+            order.GrandTotal = (cartDto.CartHeader.OrderTotal + (cartDto.CartHeader.OrderTotal / 100));
             order.Address = orderCart.Order.Address;
             order.CustomerName = orderCart.Order.CustomerName;
             order.Email = orderCart.Order.Email;
             order.PhoneNumber = orderCart.Order.PhoneNumber;
             order.UserFid = userId;
-            
-            var test=await _orderConsumeApi.CreateOrder(order);
+
+            var test = await _orderConsumeApi.CreateOrder(order);
             OrderDetailsCreateRequest orderdetail = new();
             foreach (var item in cartDto.CartDetails)
             {
@@ -77,12 +87,13 @@ namespace MultiShop.MVC.Controllers
                 orderdetail.ProductQuantity = item.Count;
                 orderdetail.SalePrice = item.Product.SalePrice;
                 orderdetail.TotalPrice = item.Product.SalePrice * item.Count;
-                var result=await _orderDetail.CreateOrderDetails(orderdetail);
+                var result = await _orderDetail.CreateOrderDetails(orderdetail);
             }
             await _cartConsumeApi.ClearCart(userId);
-           await _emailSending.SendMessageAsync(order, "auxiliumnayatel");
-            return RedirectToAction("index","Home");
+            await _emailSending.SendMessageAsync(order, "auxiliumnayatel");
+            return RedirectToAction("index", "Home");
         }
+
 
         public async Task<IActionResult> Remove(int cartDetailId)
         {
@@ -103,13 +114,13 @@ namespace MultiShop.MVC.Controllers
             var response = await _cartConsumeApi.GetCartByUserId(userId);
 
             CartDto cartDto = new();
-            
+
 
             if (response != null)
             {
                 cartDto.CartDetails = response.CartDetails;
                 cartDto.CartHeader = response.CartHeader;
-                
+
                 if (cartDto?.CartHeader != null)
                 {
                     foreach (var detail in cartDto.CartDetails)

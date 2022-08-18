@@ -1,5 +1,6 @@
 using Autofac.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -24,6 +25,8 @@ namespace MultiShop.MVC
             services.AddControllers();
             services.AddControllersWithViews();
             var container = AutofacSetup.GetServices(services);
+            services.AddDataProtection();
+            
             return new AutofacServiceProvider(container);
 
 

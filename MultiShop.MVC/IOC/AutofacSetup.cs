@@ -1,5 +1,6 @@
 ﻿using Autofac;
 using Autofac.Extensions.DependencyInjection;
+using Microsoft.AspNetCore.DataProtection;
 using Microsoft.Extensions.DependencyInjection;
 using MultiShop.Mvc.DataAccess.Infrastructure.IRepository;
 using MultiShop.Mvc.DataAccess.Infrastructure.Repository;
@@ -22,7 +23,7 @@ namespace MultiShop.MVC.IOC
             builder.RegisterType<HttpClient>().As<HttpClient>().InstancePerLifetimeScope();
             builder.RegisterType<CartConsumeApi>().As<ICartConsumeApi>().InstancePerLifetimeScope();
             builder.RegisterType<OrderDetailsConsumeApi>().As<IOrderDetailsConsuumeApi>().InstancePerLifetimeScope();
-
+            //builder.RegisterType<IDataProtector>().InstancePerLifetimeScope();
 
 
             builder.Populate(services);

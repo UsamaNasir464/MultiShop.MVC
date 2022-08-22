@@ -5,7 +5,6 @@ namespace MultiShop.Mvc.Models.ViewModels
 {
     public class Product
     {
-        [Key]
         public int Id { get; set; }
         [Required(ErrorMessage = "Product Name Is Required"), Display(Name = "Product Name")]
         [MaxLength(100, ErrorMessage = "Product Name is not Greater than 100")]
@@ -20,7 +19,6 @@ namespace MultiShop.Mvc.Models.ViewModels
         [Required(ErrorMessage = "Product Image Is Required"), Display(Name = "Product Image")]
         public string ProductImagePath { get; set; }
         public int CatFId { get; set; }
-        [ForeignKey("CatFId")]
         public virtual Category Category { get; set; }
     }
 }

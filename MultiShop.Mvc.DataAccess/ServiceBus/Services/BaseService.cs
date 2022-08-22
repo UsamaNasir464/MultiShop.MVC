@@ -19,7 +19,6 @@ namespace MultiShop.Mvc.DataAccess.ServiceBus.Services
             {
                 _httpClient.BaseAddress = new Uri(_config.GetConnectionString("BaseUri"));
             }
-           
         }
     }
 }

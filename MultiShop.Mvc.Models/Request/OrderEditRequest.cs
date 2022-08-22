@@ -5,7 +5,6 @@ namespace MultiShop.Mvc.Models.Request
 {
     public class OrderEditRequest
     {
-        [Key]
         public int Id { get; set; }
         [Required(ErrorMessage = "Email Address Is Required"), Display(Name = "Email Address")]
         [EmailAddress]

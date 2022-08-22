@@ -7,7 +7,6 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
-using System;
 using MultiShop.Mvc.DataAccess.ServiceBus.Services;
 using Microsoft.Extensions.Configuration;
 

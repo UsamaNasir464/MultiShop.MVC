@@ -4,7 +4,6 @@ namespace MultiShop.Mvc.Models.Request
 {
     public class ProductEditRequest
     {
-        [Key]
         public int Id { get; set; }
         [Required(ErrorMessage = "Product Name Is Required"), Display(Name = "Product Name")]
         [MaxLength(100, ErrorMessage = "Product Name is not Greater than 100")]

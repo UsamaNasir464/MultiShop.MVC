@@ -10,7 +10,6 @@ namespace MultiShop.Mvc.DataAccess.Infrastructure.IRepository
         Task<CartDto> UpdateCart(CartDto cartDto);
         Task<bool>RemoveFromCart(int cartDetailsId);
         Task<bool> ClearCart(string userId);
-        //Task<CartDto> CartUrlByUserId(string userId);
         Task<CartDto> LoginUserCart();
         Task<bool> AddToCart(int productId, int count);
         string CreateCartUrl();

@@ -5,7 +5,6 @@ namespace MultiShop.Mvc.Models.ViewModels
 {
     public class Order
     {
-        [Key]
         public int Id { get; set; }
         [Required(ErrorMessage = "Email Address Is Required"), Display(Name = "Email Address")]
         [EmailAddress]

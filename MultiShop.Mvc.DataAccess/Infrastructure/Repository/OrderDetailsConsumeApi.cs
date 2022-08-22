@@ -1,4 +1,6 @@
-﻿using MultiShop.Mvc.DataAccess.Infrastructure.IRepository;
+﻿using Microsoft.Extensions.Configuration;
+using MultiShop.Mvc.DataAccess.Infrastructure.IRepository;
+using MultiShop.Mvc.DataAccess.ServiceBus.Services;
 using MultiShop.Mvc.Models.Request;
 using MultiShop.Mvc.Models.Response;
 using MultiShop.Mvc.Models.ViewModels;
@@ -11,20 +13,15 @@ using System.Threading.Tasks;
 
 namespace MultiShop.Mvc.DataAccess.Infrastructure.Repository
 {
-    public class OrderDetailsConsumeApi : IOrderDetailsConsuumeApi
+    public class OrderDetailsConsumeApi : BaseService , IOrderDetailsConsuumeApi
     {
-        private readonly HttpClient _httpClient;
-        public OrderDetailsConsumeApi(HttpClient httpClient)
+        public OrderDetailsConsumeApi(HttpClient httpClient , IConfiguration config): base(config , httpClient)
         {
-            _httpClient = httpClient;
         }
         public async Task<OrderDetailsResponse> CreateOrderDetails(OrderDetailsCreateRequest request)
         {
             OrderDetailsResponse newOrderDetail = null;
-            if (_httpClient.BaseAddress == null)
-            {
-                _httpClient.BaseAddress = new Uri("https://localhost:44398/");
-            }
+            CallBaseAddress();
             var response = await _httpClient.PostAsJsonAsync<OrderDetailsCreateRequest>("api/OrderDetails/CreateOrderDetails", request);
             if (response.IsSuccessStatusCode)
             {
@@ -36,10 +33,7 @@ namespace MultiShop.Mvc.DataAccess.Infrastructure.Repository
         public async Task<List<OrderDetails>> GetAllOrderDetails()
         {
             List<OrderDetails> allOrderDetails = new List<OrderDetails>();
-            if (_httpClient.BaseAddress == null)
-            {
-                _httpClient.BaseAddress = new Uri("https://localhost:44398/");
-            }
+            CallBaseAddress();
             var response = await _httpClient.GetAsync("api/OrderDetails/Index");
             if (response.IsSuccessStatusCode)
             {
@@ -51,10 +45,7 @@ namespace MultiShop.Mvc.DataAccess.Infrastructure.Repository
         public async Task<OrderDetails> GetOrderDetailById(int id)
         {
             OrderDetails orderDetails = null;
-            if (_httpClient.BaseAddress == null)
-            {
-                _httpClient.BaseAddress = new Uri("https://localhost:44398/");
-            }
+            CallBaseAddress();
             var response = await _httpClient.GetAsync("api/OrderDetails/GetOrderDetailsById/" + id.ToString());
             if (response.IsSuccessStatusCode)
             {

@@ -1,4 +1,6 @@
-﻿using MultiShop.Mvc.DataAccess.Infrastructure.IRepository;
+﻿using Microsoft.Extensions.Configuration;
+using MultiShop.Mvc.DataAccess.Infrastructure.IRepository;
+using MultiShop.Mvc.DataAccess.ServiceBus.Services;
 using MultiShop.Mvc.Models.Response;
 using MultiShop.Mvc.Models.ViewModels;
 using Newtonsoft.Json;
@@ -9,20 +11,15 @@ using System.Threading.Tasks;
 
 namespace MultiShop.Mvc.DataAccess.Infrastructure.Repository
 {
-    public class UserAccount : IUserAccount
+    public class UserAccount : BaseService , IUserAccount
     {
-        private readonly HttpClient _httpClient;
-        public UserAccount(HttpClient httpClient)
+        public UserAccount(HttpClient httpClient, IConfiguration config) : base(config,httpClient)
         {
-            _httpClient = httpClient;
         }
         public async Task<User> CreateUserAsync(User user)
         {
             User userCreate = null;
-            if (_httpClient.BaseAddress == null)
-            {
-                _httpClient.BaseAddress = new Uri("https://localhost:44398/");
-            }
+            CallBaseAddress();
             var response = await _httpClient.PostAsJsonAsync<User>("api/UserAccountApi/Register", user);
             if (response.IsSuccessStatusCode)
             {
@@ -36,10 +33,7 @@ namespace MultiShop.Mvc.DataAccess.Infrastructure.Repository
         public async Task<LoginResponse> Login(Login login)
         {
             LoginResponse loginResponse = null;
-            if (_httpClient.BaseAddress == null)
-            {
-                _httpClient.BaseAddress = new Uri("https://localhost:44398/");
-            }
+            CallBaseAddress();
             var response = await _httpClient.PostAsJsonAsync<Login>("api/UserAccountApi/LogIn", login);
             if (response.IsSuccessStatusCode)
             {
@@ -55,10 +49,7 @@ namespace MultiShop.Mvc.DataAccess.Infrastructure.Repository
         }
         public async Task LogOut()
         {
-            if (_httpClient.BaseAddress == null)
-            {
-                _httpClient.BaseAddress = new Uri("https://localhost:44398/");
-            }
+            CallBaseAddress();
             var test = await _httpClient.GetAsync("api/UserAccountApi/LogOut");
             if (test.IsSuccessStatusCode)
             {
@@ -68,10 +59,7 @@ namespace MultiShop.Mvc.DataAccess.Infrastructure.Repository
         }
         public async Task<string> GetUserId(string email)
         {
-            if (_httpClient.BaseAddress == null)
-            {
-                _httpClient.BaseAddress = new Uri("https://localhost:44398/");
-            }
+            CallBaseAddress();
             var test = await _httpClient.GetAsync("api/UserAccountApi/GetUserId?email=" + email);
             if (test.IsSuccessStatusCode)
             {

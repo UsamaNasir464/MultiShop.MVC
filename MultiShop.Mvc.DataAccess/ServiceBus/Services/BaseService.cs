@@ -1,33 +1,25 @@
 ﻿using Microsoft.Extensions.Configuration;
 using System;
 using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Threading.Tasks;
 
 namespace MultiShop.Mvc.DataAccess.ServiceBus.Services
 {
     public class BaseService
     {
         protected readonly IConfiguration _config;
-        public BaseService(IConfiguration config)
+        protected readonly HttpClient _httpClient;
+        public BaseService(IConfiguration config, HttpClient httpClient)
         {
             _config = config;
+            _httpClient = httpClient;
         }
-        public async Task<string> CallApiAsync(string path)
+        public void CallBaseAddress()
         {
-            string response = string.Empty;
-            using (var client = new HttpClient())
+            if (_httpClient.BaseAddress == null)
             {
-                client.BaseAddress = new Uri(_config.GetConnectionString("BaseUri"));
-                client.DefaultRequestHeaders.Clear();
-                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                HttpResponseMessage ApiResponse = await client.GetAsync(path);
-                if (ApiResponse.IsSuccessStatusCode)
-                {
-                    response = ApiResponse.Content.ReadAsStringAsync().Result;
-                }
-                return response;
+                _httpClient.BaseAddress = new Uri(_config.GetConnectionString("BaseUri"));
             }
+           
         }
     }
 }

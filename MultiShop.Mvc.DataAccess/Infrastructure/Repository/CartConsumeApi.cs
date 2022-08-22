@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.DataProtection;
 using Microsoft.Extensions.Configuration;
 using MultiShop.Mvc.DataAccess.Infrastructure.IRepository;
+using MultiShop.Mvc.DataAccess.ServiceBus.Services;
 using MultiShop.Mvc.Models.Response;
 using MultiShop.Mvc.Models.ViewModels;
 using Newtonsoft.Json;
@@ -12,25 +13,18 @@ using System.Threading.Tasks;
 
 namespace MultiShop.Mvc.DataAccess.Infrastructure.Repository
 {
-    public class CartConsumeApi : ICartConsumeApi
+    public class CartConsumeApi : BaseService , ICartConsumeApi
     {
-        private readonly HttpClient _httpClient;
         private readonly IProductConsumeApi _products;
         private readonly IDataProtector _dataProtector;
-        protected readonly IConfiguration _config;
-        public CartConsumeApi(HttpClient httpClient , IProductConsumeApi products, IDataProtectionProvider dataProtector, IConfiguration config)
+        public CartConsumeApi(HttpClient httpClient , IProductConsumeApi products, IDataProtectionProvider dataProtector, IConfiguration config) : base(config , httpClient)
         {
-            _httpClient = httpClient;
             _products = products;
             _dataProtector = dataProtector.CreateProtector("So This Is MyData Protection Layer");
-            _config = config;
         }
         public async Task<bool> ClearCart(string userId)
         {
-            if (_httpClient.BaseAddress == null)
-            {
-                _httpClient.BaseAddress = new Uri("https://localhost:44398/");
-            }
+            CallBaseAddress();
             var response = await _httpClient.GetAsync("api/CartApi/ClearCart/" + userId);
             if (response.IsSuccessStatusCode)
             {
@@ -41,10 +35,7 @@ namespace MultiShop.Mvc.DataAccess.Infrastructure.Repository
         public async Task<CartDto> CreateCart(CartDto cartDto)
         {
             CartDto newCart = null;
-            if (_httpClient.BaseAddress == null)
-            {
-                _httpClient.BaseAddress = new Uri("https://localhost:44398/");
-            }
+            CallBaseAddress();
             var response = await _httpClient.PostAsJsonAsync<object>("api/CartApi/AddCart", cartDto);
             if (response.IsSuccessStatusCode)
             {
@@ -56,10 +47,7 @@ namespace MultiShop.Mvc.DataAccess.Infrastructure.Repository
         public async Task<CartDto> UpdateCart(CartDto cartDto)
         {
             CartDto newCart = null;
-            if (_httpClient.BaseAddress == null)
-            {
-                _httpClient.BaseAddress = new Uri("https://localhost:44398/");
-            }
+            CallBaseAddress();
             var response = await _httpClient.PostAsJsonAsync<CartDto>("api/CartApi/UpdateCart/", cartDto);
             if (response.IsSuccessStatusCode)
             {
@@ -71,10 +59,7 @@ namespace MultiShop.Mvc.DataAccess.Infrastructure.Repository
         public async Task<CartDto> GetCartByUserId(string userId)
         {
             CartDto cartDto = null;
-            if (_httpClient.BaseAddress == null)
-            {
-                _httpClient.BaseAddress = new Uri("https://localhost:44398/");
-            }
+            CallBaseAddress();
             var response = await _httpClient.GetAsync("api/CartApi/GetCart/" + userId.ToString());
             if (response.IsSuccessStatusCode)
             {
@@ -85,10 +70,7 @@ namespace MultiShop.Mvc.DataAccess.Infrastructure.Repository
         }
         public async Task<bool> RemoveFromCart(int cartDetailsId)
         {
-            if (_httpClient.BaseAddress == null)
-            {
-                _httpClient.BaseAddress = new Uri("https://localhost:44398/");
-            }
+            CallBaseAddress();
             var response = await _httpClient.GetAsync("/api/CartApi/RemoveCart/" + cartDetailsId.ToString());
             if (response.IsSuccessStatusCode)
             {
@@ -148,7 +130,7 @@ namespace MultiShop.Mvc.DataAccess.Infrastructure.Repository
         {
             var userId = GetEmailAndUserId.UserId;
             string encryptedText = _dataProtector.Protect(userId);
-            var baseAddress = _config.GetConnectionString("CurrentUrl");
+            var baseAddress = _config.GetConnectionString("CurrentProjectUrl");
             var cartDecryptUrl = _config.GetConnectionString("CartDecryptUrl");
             var finalUrl = baseAddress + cartDecryptUrl + encryptedText;
             return finalUrl;

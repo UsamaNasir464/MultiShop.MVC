@@ -8,19 +8,20 @@ using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
 using System;
+using MultiShop.Mvc.DataAccess.ServiceBus.Services;
+using Microsoft.Extensions.Configuration;
 
 namespace MultiShop.Mvc.DataAccess.Infrastructure.Repository
 {
-    public class OrderConsumeApi : IOrderConsumeApi
+    public class OrderConsumeApi : BaseService , IOrderConsumeApi
     {
-        private readonly HttpClient _httpClient;
         private readonly ICartConsumeApi _cartConsumeApi;
         private readonly IProductConsumeApi _productConsumeApi;
         private readonly IOrderDetailsConsuumeApi _orderDetail;
         public OrderConsumeApi(HttpClient httpClient, ICartConsumeApi cartConsumeApi,
-            IProductConsumeApi productConsumeApi, IOrderDetailsConsuumeApi orderDetail)
+            IProductConsumeApi productConsumeApi, IOrderDetailsConsuumeApi orderDetail
+            , IConfiguration config) : base(config , httpClient)
         {
-            _httpClient = httpClient;
             _cartConsumeApi = cartConsumeApi;
             _productConsumeApi = productConsumeApi;
             _orderDetail = orderDetail;
@@ -28,10 +29,7 @@ namespace MultiShop.Mvc.DataAccess.Infrastructure.Repository
         public async Task<List<Order>> GetAllOrders()
         {
             List<Order> allOrders = new List<Order>();
-            if (_httpClient.BaseAddress == null)
-            {
-                _httpClient.BaseAddress = new Uri("https://localhost:44398/");
-            }
+            CallBaseAddress();
             var response = await _httpClient.GetAsync("api/OrderApi/Index");
             if (response.IsSuccessStatusCode)
             {
@@ -43,10 +41,7 @@ namespace MultiShop.Mvc.DataAccess.Infrastructure.Repository
         public async Task<Order> GetOrderById(int id)
         {
             Order order = null;
-            if (_httpClient.BaseAddress == null)
-            {
-                _httpClient.BaseAddress = new Uri("https://localhost:44398/");
-            }
+            CallBaseAddress();
             var response = await _httpClient.GetAsync("api/OrderApi/GetOrderById/" + id.ToString());
             if (response.IsSuccessStatusCode)
             {
@@ -58,10 +53,7 @@ namespace MultiShop.Mvc.DataAccess.Infrastructure.Repository
         public async Task<CreateOrderResponse> CreateOrder(OrderCreateRequest order)
         {
             CreateOrderResponse neworder = null;
-            if (_httpClient.BaseAddress == null)
-            {
-                _httpClient.BaseAddress = new Uri("https://localhost:44398/");
-            }
+            CallBaseAddress();
             var response = await _httpClient.PostAsJsonAsync<OrderCreateRequest>("api/OrderApi/CreateOrder", order);
             if (response.IsSuccessStatusCode)
             {
@@ -73,10 +65,7 @@ namespace MultiShop.Mvc.DataAccess.Infrastructure.Repository
         public async Task<OrderEditRequest> EditOrder(OrderEditRequest order)
         {
             OrderEditRequest editOrder = null;
-            if (_httpClient.BaseAddress == null)
-            {
-                _httpClient.BaseAddress = new Uri("https://localhost:44398/");
-            }
+            CallBaseAddress();
             var response = await _httpClient.PostAsJsonAsync<OrderEditRequest>("api/OrderApi/EditOrder", order);
             if (response.IsSuccessStatusCode)
             {
@@ -87,10 +76,7 @@ namespace MultiShop.Mvc.DataAccess.Infrastructure.Repository
         }
         public bool DeleteOrder(int id)
         {
-            if (_httpClient.BaseAddress == null)
-            {
-                _httpClient.BaseAddress = new Uri("https://localhost:44398/");
-            }
+            CallBaseAddress();
             var response = _httpClient.DeleteAsync("api/OrderApi/DeleteOrderById/" + id.ToString());
             response.Wait();
             var test = response.Result;

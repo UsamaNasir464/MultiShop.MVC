@@ -36,7 +36,7 @@ namespace MultiShop.MVC.Controllers
             {
                 return RedirectToAction("CartIndex"); 
             }
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("CartIndex");
         }
         public IActionResult CreateCartLink()
         {

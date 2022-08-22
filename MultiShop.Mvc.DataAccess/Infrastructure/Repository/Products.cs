@@ -12,15 +12,14 @@ using System.Threading.Tasks;
 
 namespace MultiShop.Mvc.DataAccess.Infrastructure.Repository
 {
-    public class Products : IProducts
+    public class Products : IProductConsumeApi
     {
         private readonly HttpClient _httpClient;
-
         public Products(HttpClient httpClient)
         {
             _httpClient = httpClient;
         }
-        public async Task<Product> CreateProduct(ProductCreateRequest product)
+        public Product CreateProduct(ProductCreateRequest product)
         {
             Product newProduct = null;
             //Create Product Data Uploaded to Web Api included Image
@@ -31,14 +30,13 @@ namespace MultiShop.Mvc.DataAccess.Infrastructure.Repository
             string salePrice = product.SalePrice.ToString();
             string discountPrice = product.DiscountPrice.ToString();
             string catFId = product.CatFId.ToString();
-
+            //MutiPartFormDataContent form sending information form form
             MultipartFormDataContent multiForm = new MultipartFormDataContent();
             multiForm.Add(new StringContent(Name), "Name");
             multiForm.Add(new StringContent(Description), "Description");
             multiForm.Add(new StringContent(salePrice), "SalePrice");
             multiForm.Add(new StringContent(discountPrice), "DiscountPrice");
             multiForm.Add(new StringContent(catFId), "CatFId");
-
             //adding list of images in the MultipartFormDataContent with same key
             ByteArrayContent bytes;
             using (var br = new BinaryReader(file.OpenReadStream()))
@@ -47,7 +45,6 @@ namespace MultiShop.Mvc.DataAccess.Infrastructure.Repository
             }
             bytes = new ByteArrayContent(data);
             multiForm.Add(bytes, "ProductImage", product.ProductImage.FileName);
-
             _httpClient.BaseAddress = new Uri("https://localhost:44398/");
             _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             HttpResponseMessage httpResponseMessage = _httpClient.PostAsync("api/ProductApi/CreateProducts", multiForm).Result;
@@ -58,7 +55,6 @@ namespace MultiShop.Mvc.DataAccess.Infrastructure.Repository
             }
             return newProduct;
         }
-
         public bool DeleteProduct(int id)
         {
             if (_httpClient.BaseAddress == null)
@@ -74,7 +70,6 @@ namespace MultiShop.Mvc.DataAccess.Infrastructure.Repository
             }
             return false;
         }
-
         public async Task<ProductEditRequest> EditProduct(ProductEditRequest product)
         {
             ProductEditRequest productsEdit = null;
@@ -90,7 +85,6 @@ namespace MultiShop.Mvc.DataAccess.Infrastructure.Repository
             }
             return productsEdit;
         }
-
         public async Task<List<Product>> GetAllProducts()
         {
             List<Product> products = new List<Product>();
@@ -106,8 +100,7 @@ namespace MultiShop.Mvc.DataAccess.Infrastructure.Repository
             }
             return products;
         }
-
-        public async Task<Product> GetProductsByID(int id)
+        public async Task<Product> GetProductsById(int id)
         {
             Product product = null;
             if (_httpClient.BaseAddress == null)

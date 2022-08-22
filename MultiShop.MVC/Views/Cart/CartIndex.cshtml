@@ -1,15 +1,25 @@
 ﻿@model MultiShop.Mvc.Models.ViewModels.CartDto
 @{
     Layout = "~/Views/Shared/_LayoutCustomer.cshtml";
+    var errorMessage = ViewBag.ErrorMessage;
 }
 @if (Model.CartHeader != null && Model.CartDetails.Count() > 0)
 {
-
-
-<div class="container-fluid">
+    <h2>@errorMessage</h2>
+    <div class="container-fluid">
     <div class="row px-xl-5">
         <div class="col-lg-8 table-responsive mb-5">
             <table class="table table-light table-borderless table-hover text-center mb-0">
+                <form method="post" asp-action="CreateCartLink" asp-controller="Cart">
+                    <div class="input-group">
+
+                        <div class="input-group-append">
+                            <button class="btn btn-primary">Create Cart Link</button>
+                        </div>
+                    </div>
+                </form>
+                <br />
+                <hr />
                 <thead class="thead-dark">
                     <tr>
                         <th>Products</th>
@@ -27,17 +37,7 @@
                             <td class="align-middle">$@item.Product.SalePrice</td>
                             <td class="align-middle">
                                 <div class="input-group quantity mx-auto" style="width: 100px;">
-                                    @*<div class="input-group-btn">
-                                        <button class="btn btn-sm btn-primary btn-minus">
-                                            <i class="fa fa-minus"></i>
-                                        </button>
-                                    </div>*@
                                     <p>@item.Count</p>
-                                    @*<div class="input-group-btn">
-                                        <button class="btn btn-sm btn-primary btn-plus">
-                                            <i class="fa fa-plus"></i>
-                                        </button>
-                                    </div>*@
                                 </div>
                             </td>
                             <td class="align-middle">@(item.Product.SalePrice * item.Count)</td>

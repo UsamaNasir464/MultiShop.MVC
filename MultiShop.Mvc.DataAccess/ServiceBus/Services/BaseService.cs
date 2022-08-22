@@ -9,12 +9,10 @@ namespace MultiShop.Mvc.DataAccess.ServiceBus.Services
     public class BaseService
     {
         protected readonly IConfiguration _config;
-
         public BaseService(IConfiguration config)
         {
             _config = config;
         }
-
         public async Task<string> CallApiAsync(string path)
         {
             string response = string.Empty;
@@ -31,9 +29,5 @@ namespace MultiShop.Mvc.DataAccess.ServiceBus.Services
                 return response;
             }
         }
-
-
-
-
     }
 }

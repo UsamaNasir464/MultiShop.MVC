@@ -15,16 +15,10 @@ namespace MultiShop.Mvc.DataAccess.ServiceBus.EmailService
         }
         public async Task SendMessageAsync(OrderCreateRequest orderDetails, string queueName)
         {
-            //get Connection string
             var conectionString = _config.GetConnectionString("AzureServiceBusConnectionString");
-
-            //Queueclient Initialize
             var qClient = new QueueClient(conectionString, queueName);
-
             var msgBody = System.Text.Json.JsonSerializer.Serialize(orderDetails);
-
             var msg = new Message(Encoding.UTF8.GetBytes(msgBody));
-            
             await qClient.SendAsync(msg);
         }
     }

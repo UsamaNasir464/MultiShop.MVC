@@ -14,9 +14,16 @@ namespace MultiShop.Mvc.DataAccess.Infrastructure.Repository
     public class OrderConsumeApi : IOrderConsumeApi
     {
         private readonly HttpClient _httpClient;
-        public OrderConsumeApi(HttpClient httpClient)
+        private readonly ICartConsumeApi _cartConsumeApi;
+        private readonly IProductConsumeApi _productConsumeApi;
+        private readonly IOrderDetailsConsuumeApi _orderDetail;
+        public OrderConsumeApi(HttpClient httpClient, ICartConsumeApi cartConsumeApi,
+            IProductConsumeApi productConsumeApi, IOrderDetailsConsuumeApi orderDetail)
         {
             _httpClient = httpClient;
+            _cartConsumeApi = cartConsumeApi;
+            _productConsumeApi = productConsumeApi;
+            _orderDetail = orderDetail;
         }
         public async Task<List<Order>> GetAllOrders()
         {
@@ -33,7 +40,6 @@ namespace MultiShop.Mvc.DataAccess.Infrastructure.Repository
             }
             return allOrders;
         }
-
         public async Task<Order> GetOrderById(int id)
         {
             Order order = null;
@@ -49,7 +55,6 @@ namespace MultiShop.Mvc.DataAccess.Infrastructure.Repository
             }
             return order;
         }
-
         public async Task<CreateOrderResponse> CreateOrder(OrderCreateRequest order)
         {
             CreateOrderResponse neworder = null;
@@ -65,8 +70,6 @@ namespace MultiShop.Mvc.DataAccess.Infrastructure.Repository
             }
             return neworder;
         }
-
-
         public async Task<OrderEditRequest> EditOrder(OrderEditRequest order)
         {
             OrderEditRequest editOrder = null;
@@ -82,8 +85,6 @@ namespace MultiShop.Mvc.DataAccess.Infrastructure.Repository
             }
             return editOrder;
         }
-
-
         public bool DeleteOrder(int id)
         {
             if (_httpClient.BaseAddress == null)
@@ -98,6 +99,43 @@ namespace MultiShop.Mvc.DataAccess.Infrastructure.Repository
                 return true;
             }
             return false;
+        }
+        public async Task<bool> OrderConfirmed(CartDto orderCart)
+        {
+            var userId = GetEmailAndUserId.UserId;
+            var response = await _cartConsumeApi.GetCartByUserId(userId);
+            CartDto cartDto = new();
+            cartDto.CartDetails = response.CartDetails;
+            cartDto.CartHeader = response.CartHeader;
+            foreach (var detail in cartDto.CartDetails)
+            {
+                var product = await _productConsumeApi.GetProductsById(detail.ProductFId);
+                detail.Product = product;
+                cartDto.CartHeader.OrderTotal += product.SalePrice * detail.Count;
+            }
+            OrderCreateRequest order = new();
+            order.PaymentMethod = "Cod";
+            order.OrderDate = System.DateTime.Now;
+            order.OrderType = "Sale";
+            order.GrandTotal = (cartDto.CartHeader.OrderTotal + (cartDto.CartHeader.OrderTotal / 100));
+            order.Address = orderCart.Order.Address;
+            order.CustomerName = orderCart.Order.CustomerName;
+            order.Email = orderCart.Order.Email;
+            order.PhoneNumber = orderCart.Order.PhoneNumber;
+            order.UserFid = userId;
+            var test = await CreateOrder(order);
+            OrderDetailsCreateRequest orderdetail = new();
+            foreach (var item in cartDto.CartDetails)
+            {
+                orderdetail.ProductFId = item.ProductFId;
+                orderdetail.OrderFId = test.Order.Id;
+                orderdetail.ProductQuantity = item.Count;
+                orderdetail.SalePrice = item.Product.SalePrice;
+                orderdetail.TotalPrice = item.Product.SalePrice * item.Count;
+               await _orderDetail.CreateOrderDetails(orderdetail);
+            }
+            await _cartConsumeApi.ClearCart(userId);
+            return true;
         }
     }
 }

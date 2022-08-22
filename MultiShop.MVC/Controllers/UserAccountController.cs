@@ -6,11 +6,9 @@ using System.Threading.Tasks;
 
 namespace MultiShop.MVC.Controllers
 {
-
     public class UserAccountController : Controller
     {
         private readonly IUserAccount _userAccount;
-
         public UserAccountController(IUserAccount userAccount)
         {
             _userAccount = userAccount;
@@ -23,7 +21,6 @@ namespace MultiShop.MVC.Controllers
         public async Task<IActionResult> Register(User user)
         {
             await _userAccount.CreateUserAsync(user);
-            var userId = await _userAccount.GetUserId(GetEmailAndUserId.Email);
             return RedirectToAction("Index", "Home");
         }
         public ActionResult Login()
@@ -33,20 +30,17 @@ namespace MultiShop.MVC.Controllers
         [HttpPost]
         public async Task<IActionResult> Login(Login login)
         {
-            var loggedin=await _userAccount.Login(login);
-            var test = await _userAccount.GetUserId(GetEmailAndUserId.Email);
+            await _userAccount.Login(login);
             return RedirectToAction("Index", "Home");
         }
-        public IActionResult LogOut()
+        public async Task<IActionResult> LogOut()
         {
-            _userAccount.LogOut();
-            GetEmailAndUserId.UserId = null;
-            GetEmailAndUserId.Email = null;
+            await _userAccount.LogOut();
             return RedirectToAction("Index", "Home");
         }
         public async Task<IActionResult> GetUserId()
         {
-            var test = await _userAccount.GetUserId(GetEmailAndUserId.Email);
+            await _userAccount.GetUserId(GetEmailAndUserId.Email);
             return RedirectToAction("Index", "Order");
         }
     }

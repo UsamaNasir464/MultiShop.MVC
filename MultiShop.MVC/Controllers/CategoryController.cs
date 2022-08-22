@@ -18,7 +18,6 @@ namespace MultiShop.MVC.Controllers
             List<Category> allCategories = await _consumeCategory.GetAllCategory();
             return View(allCategories);
         }
-
         public IActionResult Create()
         {
             return View();
@@ -33,19 +32,14 @@ namespace MultiShop.MVC.Controllers
             }
             return View();
         }
-
         public async Task<ActionResult> Details(int id)
         {
-            var result = await _consumeCategory.GetCategoryById(id);
-            return View(result);
+            return View(await _consumeCategory.GetCategoryById(id));
         }
-
         public async Task<ActionResult> Edit(int id)
         {
-            var result = await _consumeCategory.GetCategoryById(id);
-            return View(result);
+            return View(await _consumeCategory.GetCategoryById(id));
         }
-
         [HttpPost]
         public async Task<ActionResult> Edit(Category category)
         {
@@ -56,15 +50,11 @@ namespace MultiShop.MVC.Controllers
             }
             return View();
         }
-
         public async Task<ActionResult> Delete(int id)
         {
-            var result = await _consumeCategory.GetCategoryById(id);
-            return View(result);
+            return View(await _consumeCategory.GetCategoryById(id));
         }
-
         [HttpPost, ActionName("Delete")]
-
         public IActionResult DeleteConfirm(int id)
         {
             _consumeCategory.DeleteCategory(id);

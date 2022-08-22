@@ -33,7 +33,6 @@ namespace MultiShop.Mvc.DataAccess.Infrastructure.Repository
             }
             return newOrderDetail;
         }
-
         public async Task<List<OrderDetails>> GetAllOrderDetails()
         {
             List<OrderDetails> allOrderDetails = new List<OrderDetails>();
@@ -49,7 +48,6 @@ namespace MultiShop.Mvc.DataAccess.Infrastructure.Repository
             }
             return allOrderDetails;
         }
-
         public async Task<OrderDetails> GetOrderDetailById(int id)
         {
             OrderDetails orderDetails = null;

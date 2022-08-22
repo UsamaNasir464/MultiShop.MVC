@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using MultiShop.Mvc.DataAccess.Infrastructure.IRepository;
 using MultiShop.Mvc.Models.Request;
 using System.Threading.Tasks;
@@ -8,20 +7,15 @@ namespace MultiShop.MVC.Controllers
 {
     public class ProductController : Controller
     {
-        private readonly IProducts _products;
-        private readonly IWebHostEnvironment _hostEnvironment;
-        private readonly ICategoryConsumeApi _consumeCategory;
-        public ProductController(IProducts products, IWebHostEnvironment hostEnvironment , ICategoryConsumeApi consumeCategory)
+        private readonly IProductConsumeApi _products;
+        public ProductController(IProductConsumeApi products)
         {
             _products = products;
-            _hostEnvironment = hostEnvironment;
-            _consumeCategory = consumeCategory;
         }
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            var products = await _products.GetAllProducts();
-            return View(products);
+            return View(await _products.GetAllProducts());
         }
         [HttpGet]
         public IActionResult Create()
@@ -29,17 +23,15 @@ namespace MultiShop.MVC.Controllers
             return View();
         }
         [HttpPost]
-        public async Task<IActionResult> Create(ProductCreateRequest product)
+        public IActionResult Create(ProductCreateRequest product)
         {
-            await _products.CreateProduct(product);
+            _products.CreateProduct(product);
             return RedirectToAction("Index");
         }
-
         [HttpGet]
         public async Task<IActionResult> Edit(int id)
         {
-            var result = await _products.GetProductsByID(id);
-            return View(result);
+            return View(await _products.GetProductsById(id));
         }
         [HttpPost]
         public async Task<IActionResult> Edit(ProductEditRequest product)
@@ -50,8 +42,7 @@ namespace MultiShop.MVC.Controllers
         [HttpGet]
         public async Task<IActionResult> Delete(int id)
         {
-            var result = await _products.GetProductsByID(id);
-            return View(result);
+            return View(await _products.GetProductsById(id));
         }
         [HttpPost, ActionName("Delete")]
         public IActionResult DeleteConfirm(int id)
@@ -61,9 +52,7 @@ namespace MultiShop.MVC.Controllers
         }
         public async Task<IActionResult> Details(int id)
         {
-            var result = await _products.GetProductsByID(id);
-            return View(result);
+            return View(await _products.GetProductsById(id));
         }
     }
-
 }

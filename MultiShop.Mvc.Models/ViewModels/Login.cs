@@ -6,7 +6,6 @@ namespace MultiShop.Mvc.Models.ViewModels
     [Keyless]
     public class Login
     {
-
         [Required(ErrorMessage = "Please Enter our Email Address"), EmailAddress]
         [Display(Name = "Email Address:")]
         public string Email { get; set; }

@@ -1,6 +1,5 @@
 ﻿using Autofac;
 using Autofac.Extensions.DependencyInjection;
-using Microsoft.AspNetCore.DataProtection;
 using Microsoft.Extensions.DependencyInjection;
 using MultiShop.Mvc.DataAccess.Infrastructure.IRepository;
 using MultiShop.Mvc.DataAccess.Infrastructure.Repository;
@@ -19,17 +18,14 @@ namespace MultiShop.MVC.IOC
             builder.RegisterType<EmailSending>().As<IEmailSending>().InstancePerLifetimeScope();
             builder.RegisterType<CategoryConsumeApi>().As<ICategoryConsumeApi>().InstancePerLifetimeScope();
             builder.RegisterType<UserAccount>().As<IUserAccount>().InstancePerLifetimeScope();
-            builder.RegisterType<Products>().As<IProducts>().InstancePerLifetimeScope();
+            builder.RegisterType<Products>().As<IProductConsumeApi>().InstancePerLifetimeScope();
             builder.RegisterType<HttpClient>().As<HttpClient>().InstancePerLifetimeScope();
             builder.RegisterType<CartConsumeApi>().As<ICartConsumeApi>().InstancePerLifetimeScope();
             builder.RegisterType<OrderDetailsConsumeApi>().As<IOrderDetailsConsuumeApi>().InstancePerLifetimeScope();
-            //builder.RegisterType<IDataProtector>().InstancePerLifetimeScope();
-
-
+            
             builder.Populate(services);
             var container = builder.Build();
             return container;
         }
-
     }
 }

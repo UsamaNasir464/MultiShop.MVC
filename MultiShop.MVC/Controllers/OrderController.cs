@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MultiShop.Mvc.DataAccess.Infrastructure.IRepository;
-using MultiShop.Mvc.DataAccess.ServiceBus.EmailService;
 using MultiShop.Mvc.Models.Request;
 using MultiShop.Mvc.Models.ViewModels;
 using System.Collections.Generic;
@@ -11,11 +10,9 @@ namespace MultiShop.MVC.Controllers
     public class OrderController : Controller
     {
         private readonly IOrderConsumeApi _order;
-        private readonly IEmailSending _emailSending;
-        public OrderController(IOrderConsumeApi order, IEmailSending emailSending)
+        public OrderController(IOrderConsumeApi order)
         {
             _order = order;
-            _emailSending = emailSending;
         }
         public async Task<ActionResult> Index()
         {
@@ -26,24 +23,20 @@ namespace MultiShop.MVC.Controllers
         {
             return View();
         }
-
         [HttpPost]
         public async Task<ActionResult> Create(OrderCreateRequest order)
         {
             if (ModelState.IsValid)
             {
                 await _order.CreateOrder(order);
-                await _emailSending.SendMessageAsync(order, "auxiliumnayatel");
                 return RedirectToAction("Index");
             }
             return View();
         }
         public async Task<ActionResult> Edit(int id)
         {
-            var result = await _order.GetOrderById(id);
-            return View(result);
+            return View(await _order.GetOrderById(id));
         }
-
         [HttpPost]
         public async Task<ActionResult> Edit(OrderEditRequest order)
         {
@@ -54,24 +47,28 @@ namespace MultiShop.MVC.Controllers
             }
             return View();
         }
-
         public async Task<ActionResult> Details(int id)
         {
-            var result = await _order.GetOrderById(id);
-            return View(result);
+            return View(await _order.GetOrderById(id));
         }
-
         public async Task<ActionResult> Delete(int id)
         {
-            var result = await _order.GetOrderById(id);
-            return View(result);
+            return View(await _order.GetOrderById(id));
         }
-
         [HttpPost, ActionName("Delete")]
         public IActionResult DeleteConfirm(int id)
         {
             _order.DeleteOrder(id);
             return RedirectToAction("index");
+        }
+        public async Task<IActionResult> OrderConfirmed(CartDto orderCart)
+        {
+            bool confirmed= await _order.OrderConfirmed(orderCart);
+            if (confirmed)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+            return RedirectToAction("Checkout", "Cart");
         }
     }
 }

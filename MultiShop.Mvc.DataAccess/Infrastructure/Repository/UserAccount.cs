@@ -12,7 +12,6 @@ namespace MultiShop.Mvc.DataAccess.Infrastructure.Repository
     public class UserAccount : IUserAccount
     {
         private readonly HttpClient _httpClient;
-
         public UserAccount(HttpClient httpClient)
         {
             _httpClient = httpClient;
@@ -30,10 +29,10 @@ namespace MultiShop.Mvc.DataAccess.Infrastructure.Repository
                 var display = response.Content.ReadAsStringAsync().Result;
                 userCreate = JsonConvert.DeserializeObject<User>(display);
                 GetEmailAndUserId.Email = user.Email;
+                await GetUserId(GetEmailAndUserId.Email);
             }
             return userCreate;
         }
-
         public async Task<LoginResponse> Login(Login login)
         {
             LoginResponse loginResponse = null;
@@ -49,11 +48,11 @@ namespace MultiShop.Mvc.DataAccess.Infrastructure.Repository
                 if (loginResponse.Email != null)
                 {
                     GetEmailAndUserId.Email = loginResponse.Email;
+                    await GetUserId(GetEmailAndUserId.Email);
                 }
             }
             return loginResponse;
         }
-
         public async Task LogOut()
         {
             if (_httpClient.BaseAddress == null)
@@ -61,6 +60,11 @@ namespace MultiShop.Mvc.DataAccess.Infrastructure.Repository
                 _httpClient.BaseAddress = new Uri("https://localhost:44398/");
             }
             var test = await _httpClient.GetAsync("api/UserAccountApi/LogOut");
+            if (test.IsSuccessStatusCode)
+            {
+                GetEmailAndUserId.UserId = null;
+                GetEmailAndUserId.Email = null;
+            }
         }
         public async Task<string> GetUserId(string email)
         {
@@ -79,4 +83,3 @@ namespace MultiShop.Mvc.DataAccess.Infrastructure.Repository
         }
     }
 }
-

@@ -7,40 +7,31 @@
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <meta content="Free HTML Templates" name="keywords">
     <meta content="Free HTML Templates" name="description">
-
     <!-- Favicon -->
     <link href="~/HomeViews/img/favicon.ico" rel="icon">
-
     <!-- Google Web Fonts -->
-    <link rel="preconnect" href="https://fonts.gstatic.com">
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
-
+    <link href="~/HomeViews/css/google-fonts.css" rel="stylesheet" />
     <!-- Font Awesome -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
-
+    <link href="~/HomeViews/css/cloudflare.css" rel="stylesheet" />
     <!-- Libraries Stylesheet -->
     <link href="~/HomeViews/lib/animate/animate.min.css" rel="stylesheet">
     <link href="~/HomeViews/lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
-
     <!-- Customized Bootstrap Stylesheet -->
     <link href="~/HomeViews/css/style.css" rel="stylesheet">
     @RenderSection("Scripts", false)
 </head>
-
 <body>
     <!-- Topbar Start -->
     <div class="container-fluid">
         <div class="row bg-secondary py-1 px-xl-5">
             <div class="col-lg-6 d-none d-lg-block">
                 <div class="d-inline-flex align-items-center h-100">
-              
                     <a class="text-body mr-3" asp-action="index" asp-controller="Category">Admin Side </a>
                 </div>
             </div>
             <div class="col-lg-6 text-center text-lg-right">
                 <div class="d-inline-flex align-items-center">
                     <a href="@Url.Action("LogOut","UserAccount")" class="nav-item nav-link">Logout</a>
-
                 </div>
                 <div class="d-inline-flex align-items-center d-block d-lg-none">
                     <a href="" class="btn px-0 ml-2">
@@ -61,7 +52,6 @@
                     <span class="h1 text-uppercase text-dark bg-primary px-2 ml-n1">Shop</span>
                 </a>
             </div>
-            
         </div>
     </div>
     <!-- Topbar End -->
@@ -81,7 +71,6 @@
                         <div class="navbar-nav mr-auto py-0">
                             <a href="@Url.Action("Index","Home")" class="nav-item nav-link active">Home</a>
                             <a href="@Url.Action("CartIndex","Cart")" class="nav-item nav-link">My Cart</a>
-   
                             <div class="nav-item dropdown">
                                 <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">My Account<i class="fa fa-angle-down mt-1"></i></a>
                                 <div class="dropdown-menu bg-primary rounded-0 border-0 m-0">
@@ -89,13 +78,11 @@
                                     <a href="@Url.Action("Login","UserAccount")" class="dropdown-item">Login</a>
                                 </div>
                             </div>
-               
+                            <a href="@Url.Action("CopyCart","Cart")" class="nav-item nav-link">Copy Cart</a>
                         </div>
-                    
                     </div>
                 </nav>
             </div>
-            
         </div>
     </div>
     <!-- Navbar End -->
@@ -172,20 +159,15 @@
     <!-- Footer End -->
     <!-- Back to Top -->
     <a href="#" class="btn btn-primary back-to-top"><i class="fa fa-angle-double-up"></i></a>
-
-
     <!-- JavaScript Libraries -->
-    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
-    <script src="lib/easing/easing.min.js"></script>
+    <script src="~/HomeViews/js/cloudflare.js"></script>
+    <script src="~/HomeViews/js/bootstrapcdn.js"></script>
+    <script src="~/HomeViews/lib/easing/easing.min.js"></script>
     <script src="~/HomeViews/lib/owlcarousel/owl.carousel.min.js"></script>
-
     <!-- Contact Javascript File -->
     <script src="~/HomeViews/mail/jqBootstrapValidation.min.js"></script>
     <script src="~/HomeViews/mail/contact.js"></script>
-
     <!-- Template Javascript -->
     <script src="~/HomeViews/js/main.js"></script>
 </body>
-
 </html>

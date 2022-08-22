@@ -13,5 +13,6 @@ namespace MultiShop.Mvc.DataAccess.Infrastructure.IRepository
         Task<CreateOrderResponse> CreateOrder(OrderCreateRequest order);
         bool DeleteOrder(int id);
         Task<OrderEditRequest> EditOrder(OrderEditRequest order);
+        Task<bool> OrderConfirmed(CartDto orderCart);
     }
 }

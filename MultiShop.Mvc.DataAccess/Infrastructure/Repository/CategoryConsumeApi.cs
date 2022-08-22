@@ -12,7 +12,6 @@ namespace MultiShop.Mvc.DataAccess.Infrastructure.Repository
     public class CategoryConsumeApi : ICategoryConsumeApi
     {
         private readonly HttpClient _httpClient;
-
         public CategoryConsumeApi(HttpClient httpClient)
         {
             _httpClient = httpClient;
@@ -32,7 +31,6 @@ namespace MultiShop.Mvc.DataAccess.Infrastructure.Repository
             }
             return categoryList;
         }
-
         public async Task<Category> GetCategoryById(int id)
         {
             Category category = null;
@@ -48,7 +46,6 @@ namespace MultiShop.Mvc.DataAccess.Infrastructure.Repository
             }
             return category;
         }
-
         public async Task<Category> CreateCategory(Category category)
         {
             Category newCategory = null;
@@ -64,8 +61,6 @@ namespace MultiShop.Mvc.DataAccess.Infrastructure.Repository
             }
             return newCategory;
         }
-
-
         public async Task<Category> EditCategory(Category category)
         {
             Category updateCategory = null;
@@ -77,11 +72,10 @@ namespace MultiShop.Mvc.DataAccess.Infrastructure.Repository
             if (response.IsSuccessStatusCode)
             {
                 var result = response.Content.ReadAsStringAsync().Result;
-                category = JsonConvert.DeserializeObject<Category>(result);
+                updateCategory = JsonConvert.DeserializeObject<Category>(result);
             }
             return updateCategory;
         }
-
         public bool DeleteCategory(int id)
         {
             if (_httpClient.BaseAddress == null)

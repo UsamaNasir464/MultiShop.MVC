@@ -56,7 +56,7 @@ namespace MultiShop.Mvc.Utills
             {
                 _httpClient.BaseAddress = new Uri(_config.GetSection("ApiUrls:ConnectionUri:BaseUri").Value);
             }
-            //_httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             var response = await _httpClient.PostAsJsonAsync<X>(apiPath,postData);
             if (response.IsSuccessStatusCode)
             {

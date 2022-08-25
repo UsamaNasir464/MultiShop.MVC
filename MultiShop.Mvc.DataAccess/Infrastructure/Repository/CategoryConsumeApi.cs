@@ -3,7 +3,6 @@ using MultiShop.Mvc.DataAccess.Infrastructure.IRepository;
 using MultiShop.Mvc.Models.ViewModels;
 using MultiShop.Mvc.Utills;
 using System.Collections.Generic;
-using System.Net.Http;
 using System.Threading.Tasks;
 
 

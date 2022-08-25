@@ -22,9 +22,32 @@ namespace MultiShop.Mvc.DataAccess.Infrastructure.Repository
         }
         public  Product CreateProduct(ProductCreateRequest product)
         {
-            var createProductRequest = GetCreateProductRequest(product);
-            var productTask = apiCall.CallApiPostAsync<Product, MultipartFormDataContent>(config.GetSection("ApiUrls:Products:CreateProduct").Value, createProductRequest);
-            return productTask.Result;
+            Product newProduct = null;
+            //Create Product Data Uploaded to Web Api included Image
+            var file = product.ProductImage;
+            byte[] data;
+            //string Name = product.Name;
+            //string Description = product.Description;
+            //string salePrice = product.SalePrice.ToString();
+            //string discountPrice = product.DiscountPrice.ToString();
+            //string catFId = product.CatFId.ToString();
+            //MutiPartFormDataContent form sending information form form
+            MultipartFormDataContent multiForm = new MultipartFormDataContent();
+            multiForm.Add(new StringContent(product.Name), "Name");
+            multiForm.Add(new StringContent(product.Description), "Description");
+            multiForm.Add(new StringContent(product.SalePrice.ToString()), "SalePrice");
+            multiForm.Add(new StringContent(product.DiscountPrice.ToString()), "DiscountPrice");
+            multiForm.Add(new StringContent(product.CatFId.ToString()), "CatFId");
+            //adding list of images in the MultipartFormDataContent with same key
+            ByteArrayContent bytes;
+            using (var br = new BinaryReader(file.OpenReadStream()))
+            {
+                data = br.ReadBytes((int)file.OpenReadStream().Length);
+            }
+            bytes = new ByteArrayContent(data);
+            multiForm.Add(bytes, "ProductImage", product.ProductImage.FileName);
+          apiCall.CallApiPostAsync<Product, MultipartFormDataContent>(config.GetSection("ApiUrls:Products:CreateProduct").Value, multiForm);
+            return newProduct;
         }
 
         public async Task<bool> DeleteProduct(int id)
@@ -44,34 +67,6 @@ namespace MultiShop.Mvc.DataAccess.Infrastructure.Repository
         {
             return await apiCall.CallApiGetAsync<Product>(config.GetSection("ApiUrls:Products:GetProductById").Value + id.ToString());   
         }
-        private MultipartFormDataContent GetCreateProductRequest(ProductCreateRequest product)
-        {
-            Product newProduct = null;
-            //Create Product Data Uploaded to Web Api included Image
-            var file = product.ProductImage;
-            byte[] data;
-            string Name = product.Name;
-            string Description = product.Description;
-            string salePrice = product.SalePrice.ToString();
-            string discountPrice = product.DiscountPrice.ToString();
-            string catFId = product.CatFId.ToString();
-            //MutiPartFormDataContent form sending information form form
-            MultipartFormDataContent multiForm = new MultipartFormDataContent();
-            multiForm.Add(new StringContent(Name), "Name");
-            multiForm.Add(new StringContent(Description), "Description");
-            multiForm.Add(new StringContent(salePrice), "SalePrice");
-            multiForm.Add(new StringContent(discountPrice), "DiscountPrice");
-            multiForm.Add(new StringContent(catFId), "CatFId");
-            //adding list of images in the MultipartFormDataContent with same key
-            ByteArrayContent bytes;
-            using (var br = new BinaryReader(file.OpenReadStream()))
-            {
-                data = br.ReadBytes((int)file.OpenReadStream().Length);
-            }
-            bytes = new ByteArrayContent(data);
-            multiForm.Add(bytes, "ProductImage", product.ProductImage.FileName);
-            return multiForm;
-        }
-
+ 
     }
 }

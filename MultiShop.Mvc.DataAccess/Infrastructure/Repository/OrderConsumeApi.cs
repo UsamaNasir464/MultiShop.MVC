@@ -10,7 +10,7 @@ using MultiShop.Mvc.DataAccess.ServiceBus.EmailService;
 
 namespace MultiShop.Mvc.DataAccess.Infrastructure.Repository
 {
-    public class OrderConsumeApi :  IOrderConsumeApi
+    public class OrderConsumeApi : IOrderConsumeApi
     {
         private readonly ICartConsumeApi _cartConsumeApi;
         private readonly IProductConsumeApi _productConsumeApi;
@@ -21,7 +21,7 @@ namespace MultiShop.Mvc.DataAccess.Infrastructure.Repository
 
         public IProductConsumeApi ProductConsume { get; }
 
-        public OrderConsumeApi(ICartConsumeApi cartConsumeApi , IProductConsumeApi productConsume , IOrderDetailsConsuumeApi orderDetail , IApiCall appiCall , IConfiguration config , IEmailSending emailSending)
+        public OrderConsumeApi(ICartConsumeApi cartConsumeApi, IProductConsumeApi productConsume, IOrderDetailsConsuumeApi orderDetail, IApiCall appiCall, IConfiguration config, IEmailSending emailSending)
         {
             _cartConsumeApi = cartConsumeApi;
             _productConsumeApi = productConsume;
@@ -37,7 +37,7 @@ namespace MultiShop.Mvc.DataAccess.Infrastructure.Repository
         public async Task<Order> GetOrderById(int id)
         {
             return await apiCall.CallApiGetAsync<Order>(config.GetSection("ApiUrls:Order:GetOrderById").Value + id.ToString());
-           
+
         }
         public async Task<CreateOrderResponse> CreateOrder(OrderCreateRequest order)
         {
@@ -76,7 +76,7 @@ namespace MultiShop.Mvc.DataAccess.Infrastructure.Repository
                 orderdetail.ProductQuantity = item.Count;
                 orderdetail.SalePrice = item.Product.SalePrice;
                 orderdetail.TotalPrice = item.Product.SalePrice * item.Count;
-               await _orderDetail.CreateOrderDetails(orderdetail);
+                await _orderDetail.CreateOrderDetails(orderdetail);
             }
             await _cartConsumeApi.ClearCart(userId);
             await _emailSending.SendMessageAsync(order, "auxiliumnayatel");

@@ -33,10 +33,7 @@ namespace MultiShop.MVC.Controllers
             }
             return View();
         }
-        public async Task<ActionResult> Edit(int id)
-        {
-            return View(await _order.GetOrderById(id));
-        }
+        
         public async Task<ActionResult> Details(int id)
         {
             return View(await _order.GetOrderById(id));

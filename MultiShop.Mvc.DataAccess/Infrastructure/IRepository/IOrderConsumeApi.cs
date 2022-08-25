@@ -12,5 +12,7 @@ namespace MultiShop.Mvc.DataAccess.Infrastructure.IRepository
         Task<Order> GetOrderById(int id);
         Task<CreateOrderResponse> CreateOrder(OrderCreateRequest order);
         Task<bool> OrderConfirmed(CartDto orderCart);
+
+
     }
 }

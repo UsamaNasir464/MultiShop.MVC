@@ -1,7 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-
-namespace MultiShop.Mvc.Models.ViewModels
+﻿namespace MultiShop.Mvc.Models.ViewModels
 {
     public class OrderDetails
     {

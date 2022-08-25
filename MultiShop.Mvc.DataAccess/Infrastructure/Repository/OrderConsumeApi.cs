@@ -2,89 +2,45 @@
 using MultiShop.Mvc.Models.Request;
 using MultiShop.Mvc.Models.Response;
 using MultiShop.Mvc.Models.ViewModels;
-using Newtonsoft.Json;
 using System.Collections.Generic;
-using System.Net.Http;
-using System.Net.Http.Json;
 using System.Threading.Tasks;
-using MultiShop.Mvc.DataAccess.ServiceBus.Services;
+using MultiShop.Mvc.Utills;
 using Microsoft.Extensions.Configuration;
 
 namespace MultiShop.Mvc.DataAccess.Infrastructure.Repository
 {
-    public class OrderConsumeApi : BaseService , IOrderConsumeApi
+    public class OrderConsumeApi :  IOrderConsumeApi
     {
         private readonly ICartConsumeApi _cartConsumeApi;
         private readonly IProductConsumeApi _productConsumeApi;
         private readonly IOrderDetailsConsuumeApi _orderDetail;
-        public OrderConsumeApi(HttpClient httpClient, ICartConsumeApi cartConsumeApi,
-            IProductConsumeApi productConsumeApi, IOrderDetailsConsuumeApi orderDetail
-            , IConfiguration config) : base(config , httpClient)
+        private readonly IApiCall apiCall;
+        private readonly IConfiguration config;
+
+        public IProductConsumeApi ProductConsume { get; }
+
+        public OrderConsumeApi(ICartConsumeApi cartConsumeApi , IProductConsumeApi productConsume , IOrderDetailsConsuumeApi orderDetail , IApiCall appiCall , IConfiguration config)
         {
             _cartConsumeApi = cartConsumeApi;
-            _productConsumeApi = productConsumeApi;
+            _productConsumeApi = productConsume;
             _orderDetail = orderDetail;
+            this.apiCall = appiCall;
+            this.config = config;
         }
         public async Task<List<Order>> GetAllOrders()
         {
-            List<Order> allOrders = new List<Order>();
-            CallBaseAddress();
-            var response = await _httpClient.GetAsync("api/OrderApi/Index");
-            if (response.IsSuccessStatusCode)
-            {
-                var result = response.Content.ReadAsStringAsync().Result;
-                allOrders = JsonConvert.DeserializeObject<List<Order>>(result);
-            }
-            return allOrders;
+            return await apiCall.CallApiGetAsync<List<Order>>(config.GetSection("ApiUrls:Order:GetAllOrder").Value);
         }
         public async Task<Order> GetOrderById(int id)
         {
-            Order order = null;
-            CallBaseAddress();
-            var response = await _httpClient.GetAsync("api/OrderApi/GetOrderById/" + id.ToString());
-            if (response.IsSuccessStatusCode)
-            {
-                var result = response.Content.ReadAsStringAsync().Result;
-                order = JsonConvert.DeserializeObject<Order>(result);
-            }
-            return order;
+            return await apiCall.CallApiGetAsync<Order>(config.GetSection("ApiUrls:Order:GetOrderById").Value + id.ToString());
+           
         }
         public async Task<CreateOrderResponse> CreateOrder(OrderCreateRequest order)
         {
-            CreateOrderResponse neworder = null;
-            CallBaseAddress();
-            var response = await _httpClient.PostAsJsonAsync<OrderCreateRequest>("api/OrderApi/CreateOrder", order);
-            if (response.IsSuccessStatusCode)
-            {
-                var result = response.Content.ReadAsStringAsync().Result;
-                neworder = JsonConvert.DeserializeObject<CreateOrderResponse>(result);
-            }
-            return neworder;
+            return await apiCall.CallApiPostAsync<CreateOrderResponse, OrderCreateRequest>(config.GetSection("ApiUrls:Order:CreateOrder").Value, order);
         }
-        public async Task<OrderEditRequest> EditOrder(OrderEditRequest order)
-        {
-            OrderEditRequest editOrder = null;
-            CallBaseAddress();
-            var response = await _httpClient.PostAsJsonAsync<OrderEditRequest>("api/OrderApi/EditOrder", order);
-            if (response.IsSuccessStatusCode)
-            {
-                var result = response.Content.ReadAsStringAsync().Result;
-                editOrder = JsonConvert.DeserializeObject<OrderEditRequest>(result);
-            }
-            return editOrder;
-        }
-        public bool DeleteOrder(int id)
-        {
-            CallBaseAddress();
-            var response = _httpClient.DeleteAsync("api/OrderApi/DeleteOrderById/" + id.ToString());
-            response.Wait();
-            var test = response.Result;
-            if (test.IsSuccessStatusCode)
-            {
-                return true;
-            }
-            return false;
-        }
+
         public async Task<bool> OrderConfirmed(CartDto orderCart)
         {
             var userId = GetEmailAndUserId.UserId;

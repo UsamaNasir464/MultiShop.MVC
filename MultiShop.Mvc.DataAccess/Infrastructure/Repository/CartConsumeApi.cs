@@ -1,81 +1,47 @@
 ﻿using Microsoft.AspNetCore.DataProtection;
 using Microsoft.Extensions.Configuration;
 using MultiShop.Mvc.DataAccess.Infrastructure.IRepository;
-using MultiShop.Mvc.DataAccess.ServiceBus.Services;
 using MultiShop.Mvc.Models.Response;
 using MultiShop.Mvc.Models.ViewModels;
-using Newtonsoft.Json;
+using MultiShop.Mvc.Utills;
 using System.Collections.Generic;
-using System.Net.Http;
-using System.Net.Http.Json;
 using System.Threading.Tasks;
 
 namespace MultiShop.Mvc.DataAccess.Infrastructure.Repository
 {
-    public class CartConsumeApi : BaseService , ICartConsumeApi
+    public class CartConsumeApi : ICartConsumeApi
     {
         private readonly IProductConsumeApi _products;
         private readonly IDataProtector _dataProtector;
-        public CartConsumeApi(HttpClient httpClient , IProductConsumeApi products, IDataProtectionProvider dataProtector, IConfiguration config) : base(config , httpClient)
+        private readonly IApiCall apiCall;
+        private readonly IConfiguration _config;
+
+        public CartConsumeApi(IApiCall apiCall ,IProductConsumeApi products, IDataProtectionProvider dataProtector, IConfiguration config) 
         {
+            this.apiCall = apiCall;
             _products = products;
+            _config = config;
             _dataProtector = dataProtector.CreateProtector("So This Is MyData Protection Layer");
         }
         public async Task<bool> ClearCart(string userId)
         {
-            CallBaseAddress();
-            var response = await _httpClient.GetAsync("api/CartApi/ClearCart/" + userId);
-            if (response.IsSuccessStatusCode)
-            {
-                return true;
-            }
-            return false;
+            return await apiCall.GetBoolAsync(_config.GetSection("ApiUrls:Cart:ClearCart").Value + userId);
         }
         public async Task<CartDto> CreateCart(CartDto cartDto)
         {
-            CartDto newCart = null;
-            CallBaseAddress();
-            var response = await _httpClient.PostAsJsonAsync<object>("api/CartApi/AddCart", cartDto);
-            if (response.IsSuccessStatusCode)
-            {
-                var result = response.Content.ReadAsStringAsync().Result;
-                newCart = JsonConvert.DeserializeObject<CartDto>(result);
-            }
-            return newCart;
+            return await apiCall.CallApiPostAsync<CartDto>(_config.GetSection("ApiUrls:Cart:CreateCart").Value, cartDto);
         }
         public async Task<CartDto> UpdateCart(CartDto cartDto)
         {
-            CartDto newCart = null;
-            CallBaseAddress();
-            var response = await _httpClient.PostAsJsonAsync<CartDto>("api/CartApi/UpdateCart/", cartDto);
-            if (response.IsSuccessStatusCode)
-            {
-                var result = response.Content.ReadAsStringAsync().Result;
-                newCart = JsonConvert.DeserializeObject<CartDto>(result);
-            }
-            return newCart;
+            return await apiCall.CallApiPostAsync<CartDto>(_config.GetSection("ApiUrls:Cart:UpdateCart").Value, cartDto);   
         }
         public async Task<CartDto> GetCartByUserId(string userId)
         {
-            CartDto cartDto = null;
-            CallBaseAddress();
-            var response = await _httpClient.GetAsync("api/CartApi/GetCart/" + userId.ToString());
-            if (response.IsSuccessStatusCode)
-            {
-                var result = response.Content.ReadAsStringAsync().Result;
-                cartDto = JsonConvert.DeserializeObject<CartDto>(result);
-            }
-            return cartDto;
+            return await apiCall.CallApiGetAsync<CartDto>(_config.GetSection("ApiUrls:Cart:GetCartByUserId").Value + userId.ToString());   
         }
         public async Task<bool> RemoveFromCart(int cartDetailsId)
         {
-            CallBaseAddress();
-            var response = await _httpClient.GetAsync("/api/CartApi/RemoveCart/" + cartDetailsId.ToString());
-            if (response.IsSuccessStatusCode)
-            {
-                return true;
-            }
-            return false;
+            return await apiCall.GetBoolAsync(_config.GetSection("ApiUrls:Cart:RemoveCart").Value + cartDetailsId.ToString());
         }
         public async Task<CartDto> LoginUserCart()
         {
@@ -129,8 +95,8 @@ namespace MultiShop.Mvc.DataAccess.Infrastructure.Repository
         {
             var userId = GetEmailAndUserId.UserId;
             string encryptedText = _dataProtector.Protect(userId);
-            var baseAddress = _config.GetConnectionString("CurrentProjectUrl");
-            var cartDecryptUrl = _config.GetConnectionString("CartDecryptUrl");
+            var baseAddress = _config.GetSection("ApiUrls:ConnectionUri:CurrentProjectUrl").Value;
+            var cartDecryptUrl = _config.GetSection("ApiUrls:Cart:CartDecryptUrl").Value;
             var finalUrl = baseAddress + cartDecryptUrl + encryptedText;
             return finalUrl;
         }
@@ -151,7 +117,7 @@ namespace MultiShop.Mvc.DataAccess.Infrastructure.Repository
         }
         public async Task<bool> AddProductToUserCartUsingUrl(int productId, int count)
         {
-            CartDto cartDto = new()
+            var cartDto = new CartDto()
             {
                 CartHeader = new CartHeaderDto
                 {
@@ -178,7 +144,7 @@ namespace MultiShop.Mvc.DataAccess.Infrastructure.Repository
         public async Task<CartDto> LoadCartDtoBasedOnRequestedUser(string decryptedUserId)
         {
             var response = await GetCartByUserId(decryptedUserId);
-            CartDto cartDto = new();
+            var cartDto = new CartDto();
             if (response != null)
             {
                 cartDto.CartDetails = response.CartDetails;

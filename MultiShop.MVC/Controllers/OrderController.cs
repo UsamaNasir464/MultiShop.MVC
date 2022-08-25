@@ -37,29 +37,9 @@ namespace MultiShop.MVC.Controllers
         {
             return View(await _order.GetOrderById(id));
         }
-        [HttpPost]
-        public async Task<ActionResult> Edit(OrderEditRequest order)
-        {
-            if (ModelState.IsValid)
-            {
-                await _order.EditOrder(order);
-                return RedirectToAction("Index");
-            }
-            return View();
-        }
         public async Task<ActionResult> Details(int id)
         {
             return View(await _order.GetOrderById(id));
-        }
-        public async Task<ActionResult> Delete(int id)
-        {
-            return View(await _order.GetOrderById(id));
-        }
-        [HttpPost, ActionName("Delete")]
-        public IActionResult DeleteConfirm(int id)
-        {
-            _order.DeleteOrder(id);
-            return RedirectToAction("index");
         }
         public async Task<IActionResult> OrderConfirmed(CartDto orderCart)
         {

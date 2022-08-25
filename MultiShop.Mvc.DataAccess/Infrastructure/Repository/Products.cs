@@ -1,24 +1,50 @@
 ﻿using Microsoft.Extensions.Configuration;
 using MultiShop.Mvc.DataAccess.Infrastructure.IRepository;
-using MultiShop.Mvc.DataAccess.ServiceBus.Services;
 using MultiShop.Mvc.Models.Request;
 using MultiShop.Mvc.Models.ViewModels;
-using Newtonsoft.Json;
+using MultiShop.Mvc.Utills;
 using System.Collections.Generic;
 using System.IO;
 using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Net.Http.Json;
 using System.Threading.Tasks;
 
 namespace MultiShop.Mvc.DataAccess.Infrastructure.Repository
 {
-    public class Products : BaseService , IProductConsumeApi
+    public class Products : IProductConsumeApi
     {
-        public Products(HttpClient httpClient,IConfiguration config): base(config , httpClient)
+        private readonly IApiCall apiCall;
+        private readonly IConfiguration config;
+
+        public Products(IApiCall apiCall, IConfiguration config)
         {
+            this.apiCall = apiCall;
+            this.config = config;
         }
-        public Product CreateProduct(ProductCreateRequest product)
+        public  Product CreateProduct(ProductCreateRequest product)
+        {
+            var createProductRequest = GetCreateProductRequest(product);
+            var productTask = apiCall.CallApiPostAsync<Product, MultipartFormDataContent>(config.GetSection("ApiUrls:Products:CreateProduct").Value, createProductRequest);
+            return productTask.Result;
+        }
+
+        public async Task<bool> DeleteProduct(int id)
+        {
+            return await apiCall.CallApiDeleteAsync(config.GetSection("ApiUrls:Products:DeleteProduct").Value + id.ToString());
+        }
+
+        public async Task<ProductEditRequest> EditProduct(ProductEditRequest product)
+        {
+            return await apiCall.CallApiPostAsync<ProductEditRequest>(config.GetSection("ApiUrls:Products:EditProduct").Value, product);   
+        }
+        public async Task<List<Product>> GetAllProducts()
+        {
+            return await apiCall.CallApiGetAsync<List<Product>>(config.GetSection("ApiUrls:Products:GetAllProducts").Value);
+        }
+        public async Task<Product> GetProductsById(int id)
+        {
+            return await apiCall.CallApiGetAsync<Product>(config.GetSection("ApiUrls:Products:GetProductById").Value + id.ToString());   
+        }
+        private MultipartFormDataContent GetCreateProductRequest(ProductCreateRequest product)
         {
             Product newProduct = null;
             //Create Product Data Uploaded to Web Api included Image
@@ -44,63 +70,8 @@ namespace MultiShop.Mvc.DataAccess.Infrastructure.Repository
             }
             bytes = new ByteArrayContent(data);
             multiForm.Add(bytes, "ProductImage", product.ProductImage.FileName);
-            CallBaseAddress();
-            _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            HttpResponseMessage httpResponseMessage = _httpClient.PostAsync("api/ProductApi/CreateProducts", multiForm).Result;
-            if (httpResponseMessage.IsSuccessStatusCode)
-            {
-                var response = httpResponseMessage.Content.ReadAsStringAsync().Result;
-                newProduct = JsonConvert.DeserializeObject<Product>(response);
-            }
-            return newProduct;
+            return multiForm;
         }
-        public bool DeleteProduct(int id)
-        {
-            CallBaseAddress();
-            var response = _httpClient.DeleteAsync("api/ProductApi/DeleteProducts/" + id.ToString());
-            response.Wait();
-            var test = response.Result;
-            if (test.IsSuccessStatusCode)
-            {
-                return true;
-            }
-            return false;
-        }
-        public async Task<ProductEditRequest> EditProduct(ProductEditRequest product)
-        {
-            ProductEditRequest productsEdit = null;
-            CallBaseAddress();
-            var response = await _httpClient.PutAsJsonAsync<ProductEditRequest>("api/ProductApi/EditProducts", product);
-            if (response.IsSuccessStatusCode)
-            {
-                var display = response.Content.ReadAsStringAsync().Result;
-                productsEdit = JsonConvert.DeserializeObject<ProductEditRequest>(display);
-            }
-            return productsEdit;
-        }
-        public async Task<List<Product>> GetAllProducts()
-        {
-            List<Product> products = new List<Product>();
-            CallBaseAddress();
-            var response = await _httpClient.GetAsync("api/ProductApi/GetProductsList");
-            if (response.IsSuccessStatusCode)
-            {
-                var display = response.Content.ReadAsStringAsync().Result;
-                products = JsonConvert.DeserializeObject<List<Product>>(display);
-            }
-            return products;
-        }
-        public async Task<Product> GetProductsById(int id)
-        {
-            Product product = null;
-            CallBaseAddress();
-            var response = await _httpClient.GetAsync("api/ProductApi/GetProductsById/" + id.ToString());
-            if (response.IsSuccessStatusCode)
-            {
-                var display = response.Content.ReadAsStringAsync().Result;
-                product = JsonConvert.DeserializeObject<Product>(display);
-            }
-            return product;
-        }
+
     }
 }

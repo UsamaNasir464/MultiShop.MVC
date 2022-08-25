@@ -1,57 +1,34 @@
 ﻿using Microsoft.Extensions.Configuration;
 using MultiShop.Mvc.DataAccess.Infrastructure.IRepository;
-using MultiShop.Mvc.DataAccess.ServiceBus.Services;
 using MultiShop.Mvc.Models.Request;
 using MultiShop.Mvc.Models.Response;
 using MultiShop.Mvc.Models.ViewModels;
-using Newtonsoft.Json;
+using MultiShop.Mvc.Utills;
 using System.Collections.Generic;
-using System.Net.Http;
-using System.Net.Http.Json;
 using System.Threading.Tasks;
 
 namespace MultiShop.Mvc.DataAccess.Infrastructure.Repository
 {
-    public class OrderDetailsConsumeApi : BaseService , IOrderDetailsConsuumeApi
+    public class OrderDetailsConsumeApi : IOrderDetailsConsuumeApi
     {
-        public OrderDetailsConsumeApi(HttpClient httpClient , IConfiguration config): base(config , httpClient)
+        private readonly IApiCall apiCall;
+        private readonly IConfiguration config;
+        public OrderDetailsConsumeApi(IApiCall apiCall , IConfiguration config)
         {
+            this.apiCall = apiCall;
+            this.config = config;
         }
         public async Task<OrderDetailsResponse> CreateOrderDetails(OrderDetailsCreateRequest request)
         {
-            OrderDetailsResponse newOrderDetail = null;
-            CallBaseAddress();
-            var response = await _httpClient.PostAsJsonAsync<OrderDetailsCreateRequest>("api/OrderDetails/CreateOrderDetails", request);
-            if (response.IsSuccessStatusCode)
-            {
-                var result = response.Content.ReadAsStringAsync().Result;
-                newOrderDetail = JsonConvert.DeserializeObject<OrderDetailsResponse>(result);
-            }
-            return newOrderDetail;
+            return await apiCall.CallApiPostAsync<OrderDetailsResponse, OrderDetailsCreateRequest>(config.GetSection("ApiUrls:OrderDetails:CreateOrderDetails").Value, request);
         }
         public async Task<List<OrderDetails>> GetAllOrderDetails()
         {
-            List<OrderDetails> allOrderDetails = new List<OrderDetails>();
-            CallBaseAddress();
-            var response = await _httpClient.GetAsync("api/OrderDetails/Index");
-            if (response.IsSuccessStatusCode)
-            {
-                var result = response.Content.ReadAsStringAsync().Result;
-                allOrderDetails = JsonConvert.DeserializeObject<List<OrderDetails>>(result);
-            }
-            return allOrderDetails;
+            return await apiCall.CallApiGetAsync<List<OrderDetails>>(config.GetSection("ApiUrls:OrderDetails:GetAllOrderDetails").Value);
         }
         public async Task<OrderDetails> GetOrderDetailById(int id)
         {
-            OrderDetails orderDetails = null;
-            CallBaseAddress();
-            var response = await _httpClient.GetAsync("api/OrderDetails/GetOrderDetailsById/" + id.ToString());
-            if (response.IsSuccessStatusCode)
-            {
-                var result = response.Content.ReadAsStringAsync().Result;
-                orderDetails = JsonConvert.DeserializeObject<OrderDetails>(result);
-            }
-            return orderDetails;
+            return await apiCall.CallApiGetAsync<OrderDetails>(config.GetSection("ApiUrls:OrderDetails:GetOrderDetailsById").Value + id.ToString());
         }
     }
 }

@@ -45,9 +45,9 @@ namespace MultiShop.MVC.Controllers
             return View(await _products.GetProductsById(id));
         }
         [HttpPost, ActionName("Delete")]
-        public IActionResult DeleteConfirm(int id)
+        public async Task<IActionResult> DeleteConfirm(int id)
         {
-            _products.DeleteProduct(id);
+             await _products.DeleteProduct(id);
             return RedirectToAction("Index");
         }
         public async Task<IActionResult> Details(int id)

@@ -30,7 +30,11 @@ namespace MultiShop.MVC.Controllers
         [HttpPost]
         public async Task<IActionResult> Login(Login login)
         {
-            await _userAccount.Login(login);
+           var data= await _userAccount.Login(login);
+            if (data.Result.succeeded)
+            {
+                TempData["message"] = " <script> alert(' Login Successfully ') </script> ";
+            }
             return RedirectToAction("Index", "Home");
         }
         public async Task<IActionResult> LogOut()

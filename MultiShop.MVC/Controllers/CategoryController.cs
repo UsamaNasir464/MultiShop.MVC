@@ -55,9 +55,9 @@ namespace MultiShop.MVC.Controllers
             return View(await _consumeCategory.GetCategoryById(id));
         }
         [HttpPost, ActionName("Delete")]
-        public IActionResult DeleteConfirm(int id)
+        public async Task <IActionResult> DeleteConfirm(int id)
         {
-            _consumeCategory.DeleteCategory(id);
+           await _consumeCategory.DeleteCategory(id);
             return RedirectToAction("index");
         }
     }

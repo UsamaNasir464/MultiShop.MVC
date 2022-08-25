@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using MultiShop.Mvc.DataAccess.Infrastructure.IRepository;
 using MultiShop.Mvc.DataAccess.Infrastructure.Repository;
 using MultiShop.Mvc.DataAccess.ServiceBus.EmailService;
+using MultiShop.Mvc.Utills;
 using System.Net.Http;
 
 namespace MultiShop.MVC.IOC
@@ -22,7 +23,7 @@ namespace MultiShop.MVC.IOC
             builder.RegisterType<HttpClient>().As<HttpClient>().InstancePerLifetimeScope();
             builder.RegisterType<CartConsumeApi>().As<ICartConsumeApi>().InstancePerLifetimeScope();
             builder.RegisterType<OrderDetailsConsumeApi>().As<IOrderDetailsConsuumeApi>().InstancePerLifetimeScope();
-            
+            builder.RegisterType<ApiCall>().As<IApiCall>().InstancePerLifetimeScope();
             builder.Populate(services);
             var container = builder.Build();
             return container;

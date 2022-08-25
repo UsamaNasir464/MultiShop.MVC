@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using MultiShop.Mvc.Utills;
 using Microsoft.Extensions.Configuration;
+using MultiShop.Mvc.DataAccess.ServiceBus.EmailService;
 
 namespace MultiShop.Mvc.DataAccess.Infrastructure.Repository
 {
@@ -16,16 +17,18 @@ namespace MultiShop.Mvc.DataAccess.Infrastructure.Repository
         private readonly IOrderDetailsConsuumeApi _orderDetail;
         private readonly IApiCall apiCall;
         private readonly IConfiguration config;
+        private readonly IEmailSending _emailSending;
 
         public IProductConsumeApi ProductConsume { get; }
 
-        public OrderConsumeApi(ICartConsumeApi cartConsumeApi , IProductConsumeApi productConsume , IOrderDetailsConsuumeApi orderDetail , IApiCall appiCall , IConfiguration config)
+        public OrderConsumeApi(ICartConsumeApi cartConsumeApi , IProductConsumeApi productConsume , IOrderDetailsConsuumeApi orderDetail , IApiCall appiCall , IConfiguration config , IEmailSending emailSending)
         {
             _cartConsumeApi = cartConsumeApi;
             _productConsumeApi = productConsume;
             _orderDetail = orderDetail;
             this.apiCall = appiCall;
             this.config = config;
+            _emailSending = emailSending;
         }
         public async Task<List<Order>> GetAllOrders()
         {
@@ -76,6 +79,7 @@ namespace MultiShop.Mvc.DataAccess.Infrastructure.Repository
                await _orderDetail.CreateOrderDetails(orderdetail);
             }
             await _cartConsumeApi.ClearCart(userId);
+            await _emailSending.SendMessageAsync(order, "auxiliumnayatel");
             return true;
         }
     }

@@ -20,7 +20,7 @@ namespace MultiShop.Mvc.DataAccess.Infrastructure.Repository
             this.apiCall = apiCall;
             this.config = config;
         }
-        public  Product CreateProduct(ProductCreateRequest product)
+        public Product CreateProduct(ProductCreateRequest product)
         {
             Product newProduct = null;
             //Create Product Data Uploaded to Web Api included Image
@@ -46,7 +46,7 @@ namespace MultiShop.Mvc.DataAccess.Infrastructure.Repository
             }
             bytes = new ByteArrayContent(data);
             multiForm.Add(bytes, "ProductImage", product.ProductImage.FileName);
-          apiCall.CallApiPostAsync<Product, MultipartFormDataContent>(config.GetSection("ApiUrls:Products:CreateProduct").Value, multiForm);
+            apiCall.CallApiPostAsync<Product, MultipartFormDataContent>(config.GetSection("ApiUrls:Products:CreateProduct").Value, multiForm);
             return newProduct;
         }
 
@@ -57,7 +57,7 @@ namespace MultiShop.Mvc.DataAccess.Infrastructure.Repository
 
         public async Task<ProductEditRequest> EditProduct(ProductEditRequest product)
         {
-            return await apiCall.CallApiPostAsync<ProductEditRequest>(config.GetSection("ApiUrls:Products:EditProduct").Value, product);   
+            return await apiCall.CallApiPostAsync<ProductEditRequest>(config.GetSection("ApiUrls:Products:EditProduct").Value, product);
         }
         public async Task<List<Product>> GetAllProducts()
         {
@@ -65,8 +65,7 @@ namespace MultiShop.Mvc.DataAccess.Infrastructure.Repository
         }
         public async Task<Product> GetProductsById(int id)
         {
-            return await apiCall.CallApiGetAsync<Product>(config.GetSection("ApiUrls:Products:GetProductById").Value + id.ToString());   
+            return await apiCall.CallApiGetAsync<Product>(config.GetSection("ApiUrls:Products:GetProductById").Value + id.ToString());
         }
- 
     }
 }
